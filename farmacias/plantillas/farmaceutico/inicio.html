@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    
+    <h1>Bienvenido al Dashboard (farmaceutico)</h1>
+    <p>Contenido protegido.</p>
+    <h1>{{empleado}}</h1>
+    <p>Hola, {{ empleado.nombre }} {{ empleado.apellido }}</p>
+    <p>Tu email es: {{ empleado.email }}</p>
+    <p>Tu cédula: {{ empleado.cedula }}</p>
+    <p>Tu fecha de ingreso: {{ empleado.fecha_ingreso }}</p>
+    <p>rol: {{empleado.rol}}</p>
+    <a href="{% url 'logout' %}">Cerrar sesión</a>
+
+{% endblock %}

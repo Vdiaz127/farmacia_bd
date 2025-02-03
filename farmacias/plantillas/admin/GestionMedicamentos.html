@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="text-center mb-4">Gestión de Medicamentos</h1>
+
+    <!-- Botón para abrir el modal de creación -->
+    <div class="d-flex justify-content-center mb-4">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearMedicamentoModal">
+            Agregar Nuevo Medicamento
+        </button>
+    </div>
+    
+    <!-- Modal de creación -->
+    <div class="modal fade" id="crearMedicamentoModal" tabindex="-1" aria-labelledby="crearMedicamentoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearMedicamentoLabel">Nuevo Medicamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'agregar_medicamento' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre del Medicamento</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="monodrogas" class="form-label">Monodrogas</label>
+                            <textarea class="form-control" id="monodrogas" name="monodrogas" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="presentacion" class="form-label">Presentación</label>
+                            <input type="text" class="form-control" id="presentacion" name="presentacion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="accion_terapeutica" class="form-label">Acción Terapéutica</label>
+                            <input type="text" class="form-control" id="accion_terapeutica" name="accion_terapeutica">
+                        </div>
+                        <div class="mb-3">
+                            <label for="precio" class="form-label">Precio</label>
+                            <input type="number" step="0.01" class="form-control" id="precio" name="precio" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="laboratorio" class="form-label">Laboratorios</label>
+                            <div>
+                                {% for laboratorio in laboratorios %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="{{ laboratorio.id }}" id="laboratorio{{ laboratorio.id }}" name="laboratorios" />
+                                        <label class="form-check-label" for="laboratorio{{ laboratorio.id }}">
+                                            {{ laboratorio.nombre }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Si hay medicamentos, mostrar un mensaje -->
+    {% if medicamentos %}
+    <div class="row">
+        {% for medicamento in medicamentos %}
+
+            <!-- Modal de edición (inicialmente oculto) -->
+            <div class="modal fade" id="editarMedicamentoModal{{ medicamento.pk }}" tabindex="-1" aria-labelledby="editarMedicamentoLabel{{ medicamento.pk }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarMedicamentoLabel{{ medicamento.pk }}">Editar Medicamento</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="{% url 'editar_medicamento' medicamento.pk %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="nombre{{ medicamento.pk }}" class="form-label">Nombre del Medicamento</label>
+                                    <input type="text" class="form-control" id="nombre{{ medicamento.pk }}" name="nombre" value="{{ medicamento.nombre }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="monodrogas{{ medicamento.pk }}" class="form-label">Monodrogas</label>
+                                    <textarea class="form-control" id="monodrogas{{ medicamento.pk }}" name="monodrogas" required>{{ medicamento.monodrogas }}</textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="presentacion{{ medicamento.pk }}" class="form-label">Presentación</label>
+                                    <input type="text" class="form-control" id="presentacion{{ medicamento.pk }}" name="presentacion" value="{{ medicamento.presentacion }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="accion_terapeutica{{ medicamento.pk }}" class="form-label">Acción Terapéutica</label>
+                                    <input type="text" class="form-control" id="accion_terapeutica{{ medicamento.pk }}" name="accion_terapeutica" value="{{ medicamento.accion_terapeutica }}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="precio{{ medicamento.pk }}" class="form-label">Precio</label>
+                                    <input type="number" step="0.01" class="form-control" id="precio{{ medicamento.pk }}" name="precio" value="{{ medicamento.precio }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="laboratorios" class="form-label">Laboratorios</label>
+                                    <div>
+                                        {% for laboratorio in laboratorios %}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="{{ laboratorio.id }}" id="laboratorio{{ laboratorio.id }}" name="laboratorios"
+                                                {% for laboratorio_sub in medicamento.medicamentolaboratorio_set.all %}
+                                                    {% if laboratorio_sub.laboratorio.id == laboratorio.id %}
+                                                        checked
+                                                    {% endif %}
+                                                {% endfor %} />
+                                                <label class="form-check-label" for="laboratorio{{ laboratorio.id }}">
+                                                    {{ laboratorio.nombre }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    
+                                </div>
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Modal de eliminación -->
+            <div class="modal fade" id="eliminarMedicamentoModal{{ medicamento.pk }}" tabindex="-1" aria-labelledby="eliminarMedicamentoLabel{{ medicamento.pk }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eliminarMedicamentoLabel{{ medicamento.pk }}">Eliminar Medicamento</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de que deseas eliminar este medicamento?</p>
+                            <p><strong>{{ medicamento.nombre }}</strong></p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="{% url 'eliminar_medicamento' medicamento.pk %}" method="POST">
+                                {% csrf_token %}
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ medicamento.nombre }}</h5>
+                        <p class="card-text">{{ medicamento.monodrogas }}</p>
+                        <p class="card-text"><strong>Presentación:</strong> {{ medicamento.presentacion }}</p>
+                        <p class="card-text"><strong>Precio:</strong> {{ medicamento.precio }}</p>
+                        <p class="card-text"><strong>Laboratorios:</strong></p>
+                        <ul>
+                            {% for medicamento_laboratorio in medicamento.medicamentolaboratorio_set.all %}
+                                <li>{{ medicamento_laboratorio.laboratorio.nombre }}</li>
+                            {% empty %}
+                                <li>No asociado a ningún laboratorio</li>
+                            {% endfor %}
+                        </ul>
+                        <div class="d-flex justify-content-between">
+                            <!-- Botón de editar -->
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarMedicamentoModal{{ medicamento.pk }}">Editar</button>
+                            
+                            <!-- Botón de eliminar -->
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarMedicamentoModal{{ medicamento.pk }}">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="mt-3 alert alert-warning text-center" role="alert">
+        No hay medicamentos registrados aún. ¡Agrega uno nuevo!
+    </div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="col-md-6 mx-auto">
+        <h1 class="mb-4 text-center">Registrar Nuevo Empleado</h1>
+
+        <!-- Mostrar errores si existen -->
+        {% if errores %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for error in errores %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'registrar_empleado' %}" class="needs-validation" novalidate>
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Correo Electrónico:</label>
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="apellido" class="form-label">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="cedula" class="form-label">Cédula:</label>
+                <input type="text" id="cedula" name="cedula" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono:</label>
+                <input type="text" id="telefono" name="telefono" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección:</label>
+                <textarea id="direccion" name="direccion" class="form-control"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="fecha_ingreso" class="form-label">Fecha de Ingreso:</label>
+                <input type="date" id="fecha_ingreso" name="fecha_ingreso" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="sucursal" class="form-label">Sucursal:</label>
+                <select id="sucursal" name="sucursal" class="form-select">
+                    <option value="" selected>Seleccione una sucursal</option>
+                    {% for sucursal in sucursales %}
+                        <option value="{{ sucursal.id }}">{{ sucursal.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="cargo" class="form-label">Cargo</label>
+                <select id="cargo" name="cargo" class="form-select">
+                    <option value="" disabled >Seleccione un cargo</option>
+                    {% for valor, nombre in cargos %}
+                        <option value="{{ valor }}">{{ nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña:</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Registrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
