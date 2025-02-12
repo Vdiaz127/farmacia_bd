@@ -109,7 +109,9 @@
             <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ sucursal.nombre }}</h5>
+                        <a href="{% url 'gestion_medicamento_sucursal' sucursal.pk %}" class="text-decoration-none text-dark">
+                            <h5 class="card-title">{{ sucursal.nombre }}</h5>
+                        </a>
                         <p class="card-text">{{ sucursal.ciudad }}</p>
                         <p class="card-text"><strong>Dirección:</strong> {{ sucursal.direccion }}</p>
                         <p class="card-text"><strong>Teléfono:</strong> {{ sucursal.telefono }}</p>

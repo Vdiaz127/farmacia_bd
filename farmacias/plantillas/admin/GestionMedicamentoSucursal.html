@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Gestión de Medicamentos en Sucursal</h1>
+    <div class="mb-3">
+        <!-- Botón para abrir el modal de creación -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarMedicamentoSucursalModal">
+            Agregar Medicamento a Sucursal
+        </button>
+
+        <!-- Modal de creación -->
+        <div class="modal fade" id="agregarMedicamentoSucursalModal" tabindex="-1" aria-labelledby="agregarMedicamentoSucursalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="agregarMedicamentoSucursalLabel">Agregar Medicamento a Sucursal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="{% url 'agregar_medicamento_sucursal' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="sucursal" value="{{ sucursal_id }}">
+                            {% for m in medicamentos %}
+                                <div class="mb-3">
+                                    <label for="medicamento" class="form-label">Medicamento</label>
+                                    <select class="form-select" id="medicamento" name="medicamento" required>
+                                        <option value="{{ m.medicamento.pk }}">{{ m.medicamento.nombre }}</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="laboratorio" class="form-label">Laboratorio</label>
+                                    <select class="form-select" id="laboratorio" name="laboratorio" required>
+                                        {% for laboratorio in m.laboratorios %}
+                                        <option value="{{ laboratorio.pk }}">{{ laboratorio.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endfor %}
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">Cantidad</label>
+                                <input type="number" class="form-control" id="cantidad" name="cantidad" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Medicamento</th>
+                <th>Sucursal</th>
+                <th>Cantidad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for medicamento_sucursal in medicamentos_sucursal %}
+            <tr>
+                <td>{{ medicamento_sucursal.medicamento.nombre }} - {{medicamento_sucursal.laboratorio.nombre}}</td>
+                <td>{{ medicamento_sucursal.sucursal.nombre }}</td>
+                <td>{{ medicamento_sucursal.cantidad }}</td>
+                <td>
+                    {% comment %} <a href="{% url 'editar_medicamento_sucursal' medicamento_sucursal.pk %}" class="btn btn-warning btn-sm">Editar</a> {% endcomment %}
+                    {% comment %} <a href="{% url 'eliminar_medicamento_sucursal' medicamento_sucursal.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este medicamento de la sucursal?');">Eliminar</a> {% endcomment %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

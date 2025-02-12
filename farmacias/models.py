@@ -89,8 +89,8 @@ class Medicamento(models.Model):
 class Medicamento_Sucursal(models.Model):
     medicamento = models.ForeignKey(Medicamento, on_delete=models.CASCADE)
     sucursal = models.ForeignKey(Sucursal, on_delete=models.CASCADE)
+    laboratorio = models.ForeignKey(Laboratorio, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
-    presentacion = models.CharField(max_length=255)
 
     def __str__(self):
         return f"{self.medicamento} en {self.sucursal}"
