@@ -18,9 +18,9 @@ def role_required(allowed_roles):
 
 
 def login_view(request):
-    
+
     next_url = request.GET.get('next', 'inicio_publico')  
-    
+
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']

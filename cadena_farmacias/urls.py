@@ -19,6 +19,7 @@ from farmacias.views import *
 from farmacias.controladores.GestionUsuarios import *
 from farmacias.controladores.LaboratorioController import *
 from farmacias.controladores.MedicamentosController import *
+from farmacias.controladores.SucursalesController import *
 
 urlpatterns = [ 
     #USUARIOS 
@@ -40,4 +41,9 @@ urlpatterns = [
     path('agregar-medicamento/', agregar_medicamento, name='agregar_medicamento'),
     path('editar-medicamento/<int:pk>/', editar_medicamento, name='editar_medicamento'),
     path('eliminar-medicamento/<int:pk>/', eliminar_medicamento, name='eliminar_medicamento'),
+
+    path('gestion_sucursales/', sucursal_get, name='gestion_sucursales'),
+    path('agregar-sucursales/', agregar_sucursal, name='agregar_sucursal'),
+    path('editar-sucursales/<int:pk>/', editar_sucursal, name='editar_sucursal'),
+    path('eliminar-sucursales/<int:pk>/', eliminar_sucursal, name='eliminar_sucursal'),
 ]

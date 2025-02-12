@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="text-center mb-4">Gestión de Sucursales</h1>
+
+    <!-- Botón para abrir el modal de creación -->
+    <div class="d-flex justify-content-center mb-4">
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearSucursalModal">
+            Agregar Nueva Sucursal
+        </button>
+    </div>
+    
+    <!-- Modal de creación -->
+    <div class="modal fade" id="crearSucursalModal" tabindex="-1" aria-labelledby="crearSucursalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearSucursalLabel">Nueva Sucursal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'agregar_sucursal' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre de la Sucursal</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ciudad" class="form-label">Ciudad</label>
+                            <input type="text" class="form-control" id="ciudad" name="ciudad" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccion" name="direccion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" id="telefono" name="telefono" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <!-- Si no hay sucursales, mostrar un mensaje -->
+    {% if sucursales %}
+    <div class="row">
+        {% for sucursal in sucursales %}
+
+            <!-- Modal de edición (inicialmente oculto) -->
+            <div class="modal fade" id="editarSucursalModal{{ sucursal.pk }}" tabindex="-1" aria-labelledby="editarSucursalLabel{{ sucursal.pk }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarSucursalLabel{{ sucursal.pk }}">Editar Sucursal</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="{% url 'editar_sucursal' sucursal.pk %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="nombre{{ sucursal.pk }}" class="form-label">Nombre de la Sucursal</label>
+                                    <input type="text" class="form-control" id="nombre{{ sucursal.pk }}" name="nombre" value="{{ sucursal.nombre }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ciudad{{ sucursal.pk }}" class="form-label">Ciudad</label>
+                                    <input type="text" class="form-control" id="ciudad{{ sucursal.pk }}" name="ciudad" value="{{ sucursal.ciudad }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="direccion{{ sucursal.pk }}" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" id="direccion{{ sucursal.pk }}" name="direccion" value="{{ sucursal.direccion }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="telefono{{ sucursal.pk }}" class="form-label">Teléfono</label>
+                                    <input type="text" class="form-control" id="telefono{{ sucursal.pk }}" name="telefono" value="{{ sucursal.telefono }}" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de eliminación -->
+            <div class="modal fade" id="eliminarSucursalModal{{ sucursal.pk }}" tabindex="-1" aria-labelledby="eliminarSucursalLabel{{ sucursal.pk }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="eliminarSucursalLabel{{ sucursal.pk }}">Eliminar Sucursal</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de que deseas eliminar esta sucursal?</p>
+                            <p><strong>{{ sucursal.nombre }}</strong></p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="{% url 'eliminar_sucursal' sucursal.pk %}" method="POST">
+                                {% csrf_token %}
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ sucursal.nombre }}</h5>
+                        <p class="card-text">{{ sucursal.ciudad }}</p>
+                        <p class="card-text"><strong>Dirección:</strong> {{ sucursal.direccion }}</p>
+                        <p class="card-text"><strong>Teléfono:</strong> {{ sucursal.telefono }}</p>
+                        <div class="d-flex justify-content-between">
+                            <!-- Botón de editar -->
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarSucursalModal{{ sucursal.pk }}">Editar</button>
+                            
+                            <!-- Botón de eliminar -->
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarSucursalModal{{ sucursal.pk }}">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="mt-3 alert alert-warning text-center" role="alert">
+        No hay sucursales registradas aún. ¡Agrega una nueva!
+    </div>
+    {% endif %}
+
+{% endblock %}
