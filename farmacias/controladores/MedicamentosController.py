@@ -24,25 +24,34 @@ class MedicamentoForm(forms.ModelForm):
 @role_required(['admin'])
 def gestion_medicamentos(request):
     medicamentos = Medicamento.objects.all()
-    laboratorios = Laboratorio.objects.all()  # Cambié el nombre a minúsculas
-    return render(request, 'admin/GestionMedicamentos.html', {'medicamentos': medicamentos, 'laboratorios': laboratorios})  
-    
+    laboratorios = Laboratorio.objects.all()
+    # Se asume que también envías en el contexto las monodrogas para usarlas en la vista (en creación y edición)
+    from farmacias.models import Monodroga
+    monodrogas = Monodroga.objects.all()
+    return render(request, 'admin/GestionMedicamentos.html', {
+        'medicamentos': medicamentos, 
+        'laboratorios': laboratorios,
+        'monodrogas': monodrogas,
+    })  
+
+
 @login_required
 @role_required(['admin'])
 def agregar_medicamento(request):
     if request.method == 'POST':
         form = MedicamentoForm(request.POST)
         if form.is_valid():
-            # Crear el medicamento
-            medicamento = form.save()
+            # Guardamos el medicamento sin comprometer la relación many-to-many aún
+            medicamento = form.save(commit=False)
+            medicamento.save()
+            # Procesamos el campo ManyToMany de monodrogas
+            form.save_m2m()
 
             # Obtener los IDs de los laboratorios seleccionados
             laboratorios_seleccionados = request.POST.getlist('laboratorios')
-            print(laboratorios_seleccionados)
             # Asociar cada laboratorio seleccionado con el medicamento usando la tabla intermedia
             for laboratorio_id in laboratorios_seleccionados:
                 laboratorio = Laboratorio.objects.get(id=laboratorio_id)
-                print(laboratorio)
                 MedicamentoLaboratorio.objects.create(medicamento=medicamento, laboratorio=laboratorio)
 
             messages.success(request, "Medicamento agregado correctamente.")
@@ -56,8 +65,6 @@ def agregar_medicamento(request):
         return redirect('gestion_medicamentos')
 
 
-
-    
 @login_required
 @role_required(['admin'])
 def editar_medicamento(request, pk):
@@ -65,7 +72,10 @@ def editar_medicamento(request, pk):
     if request.method == 'POST':
         form = MedicamentoForm(request.POST, instance=medicamento)
         if form.is_valid():
-            medicamento = form.save()  # Guarda el medicamento actualizado
+            medicamento = form.save(commit=False)
+            medicamento.save()
+            # Actualizamos las relaciones many-to-many de monodrogas
+            form.save_m2m()
             
             # Limpiar las asociaciones previas con los laboratorios
             MedicamentoLaboratorio.objects.filter(medicamento=medicamento).delete()
@@ -79,14 +89,12 @@ def editar_medicamento(request, pk):
             messages.success(request, "Medicamento actualizado correctamente.")
             return redirect('gestion_medicamentos')
         else:
-            # Mostrar los errores específicos del formulario
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"Error en el campo {field}: {error}")
             return redirect('gestion_medicamentos')
     else:
         return redirect('gestion_medicamentos')
-
 
 
 @login_required

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Detalles de la Sucursal -->
+    <div class="mb-4">
+        <h1>Perfil de Sucursal: {{ sucursal.nombre }}</h1>
+        <p><strong>Ciudad:</strong> {{ sucursal.ciudad }}</p>
+        <p><strong>Dirección:</strong> {{ sucursal.direccion }}</p>
+        <p><strong>Teléfono:</strong> {{ sucursal.telefono }}</p>
+    </div>
+
+    <hr>
+
+    <!-- Empleados de la Sucursal -->
+    <h2>Empleados</h2>
+    <div class="row">
+        {% for empleado in empleados %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ empleado.nombre }} {{ empleado.apellido }}</h5>
+                        <p class="card-text">
+                            <strong>Cédula:</strong> {{ empleado.cedula }}<br>
+                            <strong>Email:</strong> {{ empleado.email }}<br>
+                            <strong>Cargo:</strong> {{ empleado.get_cargo_display }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p>No hay empleados registrados en esta sucursal.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <!-- Medicamentos en la Sucursal -->
+    <h2>Medicamentos en Sucursal</h2>
+    <div class="row">
+        {% for item in medicamentos %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.medicamento.nombre }}</h5>
+                        <p class="card-text">
+                            <strong>Presentación:</strong> {{ item.medicamento.presentacion }}<br>
+                            <strong>Precio:</strong> ${{ item.medicamento.precio }}<br>
+                            <strong>Laboratorio:</strong> {{ item.laboratorio.nombre }}<br>
+                            <strong>Cantidad:</strong> {{ item.cantidad }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p>No hay medicamentos registrados en esta sucursal.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

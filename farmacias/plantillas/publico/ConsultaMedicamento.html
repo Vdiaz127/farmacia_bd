@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Consulta de Medicamento</h1>
+    <!-- Formulario de búsqueda -->
+    <form method="GET" action="/">
+        <div class="mb-3">
+            <input type="text" name="q" class="form-control" placeholder="Ingrese el nombre del medicamento" value="{{ query }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+    
+    {% if query %}
+        <h2 class="mt-4">Resultados para "{{ query }}"</h2>
+        {% if resultados %}
+            <div class="row">
+                {% for registro in resultados %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title">{{ registro.medicamento.nombre }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Laboratorio:</strong> {{ registro.laboratorio.nombre }}</p>
+                            <p><strong>Precio:</strong> ${{ registro.medicamento.precio }}</p>
+                            <p>
+                                <strong>Compuestos:</strong>
+                                {% for monodroga in registro.medicamento.monodrogas.all %}
+                                    {{ monodroga.nombre }}{% if not forloop.last %}, {% endif %}
+                                {% empty %}
+                                    No definido.
+                                {% endfor %}
+                            </p>
+                            <hr>
+                            <h6 class="text-center">Sucursal</h6>
+                            <p><strong>Nombre:</strong> <a href="{% url 'perfil_sucursal' registro.sucursal.pk %}">{{ registro.sucursal.nombre }}</a></p>
+                            <p><strong>Ciudad:</strong> {{ registro.sucursal.ciudad }}</p>
+                            <p><strong>Dirección:</strong> {{ registro.sucursal.direccion }}</p>
+                            <p><strong>Teléfono:</strong> {{ registro.sucursal.telefono }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No se encontraron resultados para "{{ query }}".</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

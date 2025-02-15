@@ -13,7 +13,7 @@
                         <h5 class="card-title">Hola, {{ empleado.nombre }} {{ empleado.apellido }}</h5>
                         <p class="card-text">Correo: {{ empleado.email }}</p>
                         <p class="card-text">Cédula: {{ empleado.cedula }}</p>
-                        <p class="card-text">Rol: {{ empleado.get_rol_display }}</p>
+                        <p class="card-text">Cargo: {{ empleado.get_cargo_display }}</p>
                         <p class="card-text">Sucursal: {% if empleado.sucursal %}{{ empleado.sucursal.nombre }}{% else %}No asignada{% endif %}</p>
                     </div>
                 </div>
@@ -39,19 +39,21 @@
                     </div>
                 </a>
             </div>
+
+            <div class="col-md-3 mb-3">
+                <a href="{% url 'listar_monodrogas' %}" class="card text-center shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestión de Monodrogas</h5>
+                        <p class="card-text">Administrar monodrogas</p>
+                    </div>
+                </a>
+            </div>
+
             <div class="col-md-3 mb-3">
                 <a href="{% url 'gestion_medicamentos' %}" class="card text-center shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestión de Medicamentos</h5>
                         <p class="card-text">Administrar medicamentos</p>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-3 mb-3">
-                <a href="" class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Gestión de Stock</h5>
-                        <p class="card-text">Administrar inventario</p>
                     </div>
                 </a>
             </div>

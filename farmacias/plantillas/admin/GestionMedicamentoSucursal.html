@@ -2,11 +2,11 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1>Gestión de Medicamentos en Sucursal</h1>
+    <h1>Gestión de Medicamentos en Sucursal  ( {{ sucursal.nombre }} )</h1>
     <div class="mb-3">
         <!-- Botón para abrir el modal de creación -->
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarMedicamentoSucursalModal">
-            Agregar Medicamento a Sucursal
+            Agregar Medicamento a Sucursal 
         </button>
 
         <!-- Modal de creación -->
@@ -20,23 +20,19 @@
                     <div class="modal-body">
                         <form method="POST" action="{% url 'agregar_medicamento_sucursal' %}">
                             {% csrf_token %}
-                            <input type="hidden" name="sucursal" value="{{ sucursal_id }}">
-                            {% for m in medicamentos %}
-                                <div class="mb-3">
-                                    <label for="medicamento" class="form-label">Medicamento</label>
-                                    <select class="form-select" id="medicamento" name="medicamento" required>
-                                        <option value="{{ m.medicamento.pk }}">{{ m.medicamento.nombre }}</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="laboratorio" class="form-label">Laboratorio</label>
-                                    <select class="form-select" id="laboratorio" name="laboratorio" required>
-                                        {% for laboratorio in m.laboratorios %}
-                                        <option value="{{ laboratorio.pk }}">{{ laboratorio.nombre }}</option>
+                            <input type="hidden" name="sucursal" value="{{ sucursal.pk }}">
+                            <div class="mb-3">
+                                <label for="medicamento_laboratorio" class="form-label">Medicamento - Laboratorio</label>
+                                <select class="form-select" id="medicamento_laboratorio" name="medicamento_laboratorio" required>
+                                    {% for m in medicamentos %}
+                                        {% for lab in m.laboratorios %}
+                                            <option value="{{ m.medicamento.pk }}|{{ lab.pk }}">
+                                                {{ m.medicamento.nombre }} - {{ lab.nombre }}
+                                            </option>
                                         {% endfor %}
-                                    </select>
-                                </div>
-                            {% endfor %}
+                                    {% endfor %}
+                                </select>
+                            </div>
                             <div class="mb-3">
                                 <label for="cantidad" class="form-label">Cantidad</label>
                                 <input type="number" class="form-control" id="cantidad" name="cantidad" required>
@@ -48,10 +44,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Listado de medicamentos en sucursal -->
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Medicamento</th>
+                <th>Medicamento - Laboratorio</th>
                 <th>Sucursal</th>
                 <th>Cantidad</th>
                 <th>Acciones</th>
@@ -60,12 +58,11 @@
         <tbody>
             {% for medicamento_sucursal in medicamentos_sucursal %}
             <tr>
-                <td>{{ medicamento_sucursal.medicamento.nombre }} - {{medicamento_sucursal.laboratorio.nombre}}</td>
+                <td>{{ medicamento_sucursal.medicamento.nombre }} - {{ medicamento_sucursal.laboratorio.nombre }}</td>
                 <td>{{ medicamento_sucursal.sucursal.nombre }}</td>
                 <td>{{ medicamento_sucursal.cantidad }}</td>
                 <td>
-                    {% comment %} <a href="{% url 'editar_medicamento_sucursal' medicamento_sucursal.pk %}" class="btn btn-warning btn-sm">Editar</a> {% endcomment %}
-                    {% comment %} <a href="{% url 'eliminar_medicamento_sucursal' medicamento_sucursal.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este medicamento de la sucursal?');">Eliminar</a> {% endcomment %}
+                    {% comment %} Aquí puedes agregar botones para editar o eliminar {% endcomment %}
                 </td>
             </tr>
             {% endfor %}

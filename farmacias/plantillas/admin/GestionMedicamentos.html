@@ -25,10 +25,21 @@
                             <label for="nombre" class="form-label">Nombre del Medicamento</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required>
                         </div>
+                        
                         <div class="mb-3">
-                            <label for="monodrogas" class="form-label">Monodrogas</label>
-                            <textarea class="form-control" id="monodrogas" name="monodrogas" required></textarea>
+                            <label class="form-label">Monodrogas</label>
+                            <div>
+                                {% for monodroga in monodrogas %}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="{{ monodroga.id }}" id="monodroga{{ monodroga.id }}" name="monodrogas">
+                                        <label class="form-check-label" for="monodroga{{ monodroga.id }}">
+                                            {{ monodroga.nombre }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
+
                         <div class="mb-3">
                             <label for="presentacion" class="form-label">Presentación</label>
                             <input type="text" class="form-control" id="presentacion" name="presentacion" required>
@@ -54,8 +65,7 @@
                                 {% endfor %}
                             </div>
                         </div>
-                        
-                        
+
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </form>
                 </div>
@@ -63,12 +73,11 @@
         </div>
     </div>
 
-    <!-- Si hay medicamentos, mostrar un mensaje -->
     {% if medicamentos %}
     <div class="row">
         {% for medicamento in medicamentos %}
 
-            <!-- Modal de edición (inicialmente oculto) -->
+            <!-- Modal de edición -->
             <div class="modal fade" id="editarMedicamentoModal{{ medicamento.pk }}" tabindex="-1" aria-labelledby="editarMedicamentoLabel{{ medicamento.pk }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -84,8 +93,18 @@
                                     <input type="text" class="form-control" id="nombre{{ medicamento.pk }}" name="nombre" value="{{ medicamento.nombre }}" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="monodrogas{{ medicamento.pk }}" class="form-label">Monodrogas</label>
-                                    <textarea class="form-control" id="monodrogas{{ medicamento.pk }}" name="monodrogas" required>{{ medicamento.monodrogas }}</textarea>
+                                    <label class="form-label">Monodrogas</label>
+                                    <div>
+                                        {% for monodroga in monodrogas %}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="{{ monodroga.id }}" id="monodroga{{ medicamento.pk }}_{{ monodroga.id }}" name="monodrogas"
+                                                {% if monodroga in medicamento.monodrogas.all %} checked {% endif %}>
+                                                <label class="form-check-label" for="monodroga{{ medicamento.pk }}_{{ monodroga.id }}">
+                                                    {{ monodroga.nombre }}
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="presentacion{{ medicamento.pk }}" class="form-label">Presentación</label>
@@ -96,7 +115,7 @@
                                     <input type="text" class="form-control" id="accion_terapeutica{{ medicamento.pk }}" name="accion_terapeutica" value="{{ medicamento.accion_terapeutica }}">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="precio{{ medicamento.pk }}" class="form-label">Precio</label>
+                                    <label for="precio{{ medicamento.pk }}" class="form-label">Precio, antiguo: {{ medicamento.precio }}</label>
                                     <input type="number" step="0.01" class="form-control" id="precio{{ medicamento.pk }}" name="precio" value="{{ medicamento.precio }}" required>
                                 </div>
                                 <div class="mb-3">
@@ -107,7 +126,7 @@
                                                 <input class="form-check-input" type="checkbox" value="{{ laboratorio.id }}" id="laboratorio{{ laboratorio.id }}" name="laboratorios"
                                                 {% for laboratorio_sub in medicamento.medicamentolaboratorio_set.all %}
                                                     {% if laboratorio_sub.laboratorio.id == laboratorio.id %}
-                                                        checked
+                                                    checked
                                                     {% endif %}
                                                 {% endfor %} />
                                                 <label class="form-check-label" for="laboratorio{{ laboratorio.id }}">
@@ -116,7 +135,6 @@
                                             </div>
                                         {% endfor %}
                                     </div>
-                                    
                                 </div>
                                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                             </form>
@@ -124,8 +142,6 @@
                     </div>
                 </div>
             </div>
-
-
 
             <!-- Modal de eliminación -->
             <div class="modal fade" id="eliminarMedicamentoModal{{ medicamento.pk }}" tabindex="-1" aria-labelledby="eliminarMedicamentoLabel{{ medicamento.pk }}" aria-hidden="true">
@@ -136,25 +152,32 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
-                            <p>¿Estás seguro de que deseas eliminar este medicamento?</p>
-                            <p><strong>{{ medicamento.nombre }}</strong></p>
+                            <p>¿Estás seguro de que deseas eliminar el medicamento <strong>{{ medicamento.nombre }}</strong>?</p>
                         </div>
                         <div class="modal-footer">
-                            <form action="{% url 'eliminar_medicamento' medicamento.pk %}" method="POST">
+                            <form method="POST" action="{% url 'eliminar_medicamento' medicamento.pk %}">
                                 {% csrf_token %}
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                                 <button type="submit" class="btn btn-danger">Eliminar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Tarjeta de Medicamento -->
             <div class="col-md-4 mb-3">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ medicamento.nombre }}</h5>
-                        <p class="card-text">{{ medicamento.monodrogas }}</p>
+                        <p class="card-text"><strong>Monodrogas:</strong></p>
+                        <ul>
+                            {% for monodroga in medicamento.monodrogas.all %}
+                                <li>{{ monodroga.nombre }}</li>
+                            {% empty %}
+                                <li>No contiene monodrogas</li>
+                            {% endfor %}
+                        </ul>
                         <p class="card-text"><strong>Presentación:</strong> {{ medicamento.presentacion }}</p>
                         <p class="card-text"><strong>Precio:</strong> {{ medicamento.precio }}</p>
                         <p class="card-text"><strong>Laboratorios:</strong></p>
@@ -166,10 +189,7 @@
                             {% endfor %}
                         </ul>
                         <div class="d-flex justify-content-between">
-                            <!-- Botón de editar -->
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarMedicamentoModal{{ medicamento.pk }}">Editar</button>
-                            
-                            <!-- Botón de eliminar -->
                             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarMedicamentoModal{{ medicamento.pk }}">Eliminar</button>
                         </div>
                     </div>
@@ -183,5 +203,4 @@
         No hay medicamentos registrados aún. ¡Agrega uno nuevo!
     </div>
     {% endif %}
-
 {% endblock %}
