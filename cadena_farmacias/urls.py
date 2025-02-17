@@ -22,6 +22,7 @@ from farmacias.controladores.MedicamentosController import *
 from farmacias.controladores.SucursalesController import *
 from farmacias.controladores.MedicamentoSucursalController import *
 from farmacias.controladores.MonodrogaController import *
+from farmacias.controladores.EmpleadoControllers import *
 
 
 urlpatterns = [ 
@@ -64,5 +65,11 @@ urlpatterns = [
     #MEDICAMENTOS EN SUCURSALES
     path('gestion_medicamento_sucursal/<int:pk>', gestion_medicamento_sucursal, name='gestion_medicamento_sucursal'),
     path('agregar_medicamento_sucursal/', agregar_medicamento_sucursal, name='agregar_medicamento_sucursal'),
+
+    #EMPLEADOS
+    path('gestion_empleados/', gestion_empleados, name='gestion_empleados'),
+    # path('agregar_empleado/', agregar_empleado, name='agregar_empleado'),
+    path('editar_empleado/<int:pk>/', editar_empleado, name='editar_empleado'),
+    path('eliminar_empleado/<int:pk>/', eliminar_empleado, name='eliminar_empleado'),
 
 ]
