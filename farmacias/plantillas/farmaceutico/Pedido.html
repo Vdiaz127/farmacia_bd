@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-body">
+            <h1 class="card-title">Realizar Pedido</h1>
+            <form id="pedidoForm" method="post" action="{% url 'crear_pedido' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="laboratorio">Laboratorio</label>
+                    <select id="laboratorio" name="laboratorio" class="form-control" required onchange="updateMedicamentos()">
+                        <option value="">Seleccione un laboratorio</option>
+                        {% for laboratorio in laboratorios %}
+                            <option value="{{ laboratorio.id }}">{{ laboratorio.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group mt-3" id="medicamentos-container">
+                    <label for="medicamentos">Medicamentos</label>
+                    <div id="medicamentos">
+                        <!-- Medicamentos will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="form-group mt-3">
+                    <label for="forma_pago">Forma de Pago</label>
+                    <select id="forma_pago" name="forma_pago" class="form-control" required>
+                        {% for key, value in forma_pago_choices %}
+                            <option value="{{ key }}">{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Realizar Pedido</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% block extra_js %}
+<script>
+    const medicamentosData = {{ medicamentos|safe }};
+    const medicamentosLaboratoriosData = {{ medicamentos_laboratorios|safe }};
+    
+    function updateMedicamentos() {
+        const laboratorioId = document.getElementById('laboratorio').value;
+        console.log('Laboratorio seleccionado:', laboratorioId); // Debugging line
+        const medicamentosContainer = document.getElementById('medicamentos-container');
+        const medicamentosDiv = document.getElementById('medicamentos');
+        medicamentosDiv.innerHTML = '';
+
+        if (laboratorioId) {
+            const filteredMedicamentosIds = medicamentosLaboratoriosData
+                .filter(ml => ml.laboratorio_id == laboratorioId)
+                .map(ml => ml.medicamento_id);
+            console.log('IDs de medicamentos filtrados:', filteredMedicamentosIds); // Debugging line
+            const filteredMedicamentos = medicamentosData
+                .filter(med => filteredMedicamentosIds.includes(med.id));
+            console.log('Medicamentos filtrados:', filteredMedicamentos); // Debugging line
+            filteredMedicamentos.forEach(medicamento => {
+                const medicamentoItem = document.createElement('div');
+                medicamentoItem.classList.add('medicamento-item');
+                medicamentoItem.innerHTML = `
+                    <input type="checkbox" id="medicamento_${medicamento.id}" name="medicamentos" value="${medicamento.id}">
+                    <label for="medicamento_${medicamento.id}">${medicamento.nombre}</label>
+                    <input type="number" id="cantidad_${medicamento.id}" name="cantidades_${medicamento.id}" class="form-control" placeholder="Cantidad" min="1" disabled>
+                `;
+                medicamentosDiv.appendChild(medicamentoItem);
+
+                // Enable/disable quantity input based on checkbox state
+                const checkbox = medicamentoItem.querySelector(`#medicamento_${medicamento.id}`);
+                const cantidadInput = medicamentoItem.querySelector(`#cantidad_${medicamento.id}`);
+                checkbox.addEventListener('change', () => {
+                    cantidadInput.disabled = !checkbox.checked;
+                    if (!checkbox.checked) {
+                        cantidadInput.value = '';
+                    }
+                });
+            });
+        }
+    }
+
+    document.getElementById('pedidoForm').addEventListener('submit', function(event) {
+        const checkboxes = document.querySelectorAll('input[name="medicamentos"]:checked');
+        let valid = true;
+        checkboxes.forEach(checkbox => {
+            const cantidadInput = document.querySelector(`#cantidad_${checkbox.value}`);
+            if (!cantidadInput.value) {
+                valid = false;
+                cantidadInput.classList.add('is-invalid');
+            } else {
+                cantidadInput.classList.remove('is-invalid');
+            }
+        });
+
+        if (!valid) {
+            event.preventDefault();
+            alert('Por favor, indique la cantidad para cada medicamento seleccionado.');
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}
+
+

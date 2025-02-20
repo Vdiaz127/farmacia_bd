@@ -17,6 +17,7 @@ Including another URLconf
 from django.urls import path
 from farmacias.views import *
 from farmacias.controladores.GestionUsuarios import *
+
 from farmacias.controladores.LaboratorioController import *
 from farmacias.controladores.MedicamentosController import *
 from farmacias.controladores.SucursalesController import *
@@ -24,16 +25,20 @@ from farmacias.controladores.MedicamentoSucursalController import *
 from farmacias.controladores.MonodrogaController import *
 
 
-urlpatterns = [ 
+from farmacias.controladores.farmaceutico.InicioFarmaceuticoController import *
+from farmacias.controladores.farmaceutico.PedidosController import *
 
+
+urlpatterns = [ 
+    
     #PUBLICO
     path('login/', login_view, name='login'),
     path('logout/', logout_view, name='logout'),
     path('', consulta_medicamento, name='inicio_publico'),  
     path('registrar_empleado/', registrar_empleado, name='registrar_empleado'),
     path('sucursal/<int:pk>/', perfil_sucursal, name='perfil_sucursal'),
-    
-     #USUARIOS 
+
+    #USUARIO: ADMINISTRADOR
     path('admin/',inicio_admin, name='inicio_admin'),
     path('farmaceutico/',inicio_farmaceutico, name='inicio_farmaceutico'),
 
@@ -65,4 +70,11 @@ urlpatterns = [
     path('gestion_medicamento_sucursal/<int:pk>', gestion_medicamento_sucursal, name='gestion_medicamento_sucursal'),
     path('agregar_medicamento_sucursal/', agregar_medicamento_sucursal, name='agregar_medicamento_sucursal'),
 
+
+    #USUARIO: FARMAUCETICO
+    path('farmaceutico/', inicio_farmaceutico, name='inicio_farmaceutico'),
+    path('crear_pedido/', crear_pedido, name='crear_pedido'),
+    path('editar_pedido/<int:pedido_id>/', editar_pedido, name='editar_pedido'),
+    path('eliminar_pedido_pedido/<int:pedido_id>/', eliminar_pedido, name='eliminar_pedido'),
+   
 ]

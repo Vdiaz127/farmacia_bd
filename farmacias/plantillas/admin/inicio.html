@@ -1,62 +1,106 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="text-center">Bienvenido al Dashboard de Administrador</h1>
+<div class="container mt-5">
+    <!-- Encabezado Principal -->
+    <div class="text-center mb-4">
+        <h1 class="display-4">
+            <i class="bi bi-speedometer2 me-2"></i>Dashboard de Administrador
+        </h1>
+        <p class="lead">Panel de control para gestionar la cadena de farmacias</p>
+    </div>
 
-    <div class="container mt-5">
-        <div class="d-flex flex-column align-items-center">
-            <h2>Información de tu cuenta:</h2>
-            
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Hola, {{ empleado.nombre }} {{ empleado.apellido }}</h5>
-                        <p class="card-text">Correo: {{ empleado.email }}</p>
-                        <p class="card-text">Cédula: {{ empleado.cedula }}</p>
-                        <p class="card-text">Cargo: {{ empleado.get_cargo_display }}</p>
-                        <p class="card-text">Sucursal: {% if empleado.sucursal %}{{ empleado.sucursal.nombre }}{% else %}No asignada{% endif %}</p>
-                    </div>
+    <!-- Información de la cuenta -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-6">
+            <div class="card border-primary shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <span>Información de tu cuenta</span>
+                    <i class="bi bi-person-circle" style="font-size: 1.5rem;"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Hola, {{ empleado.nombre }} {{ empleado.apellido }}</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-envelope me-2"></i><strong>Correo:</strong> {{ empleado.email }}</li>
+                        <li><i class="bi bi-credit-card-2-front me-2"></i><strong>Cédula:</strong> {{ empleado.cedula }}</li>
+                        <li><i class="bi bi-briefcase me-2"></i><strong>Cargo:</strong> {{ empleado.get_cargo_display }}</li>
+                        <li>
+                            <i class="bi bi-building me-2"></i>
+                            <strong>Sucursal:</strong> 
+                            {% if empleado.sucursal %}{{ empleado.sucursal.nombre }}{% else %}No asignada{% endif %}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
-        
+    </div>
 
-        <h2 class="mt-5 text-center">Gestiones Administrativas:</h2>
-        <div class="row">
-            <div class="col-md-3 mb-3">
-                <a href="{% url 'gestion_sucursales' %}" class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Gestión de Sucursales</h5>
+    <!-- Gestiones Administrativas -->
+    <div class="text-center mb-4">
+        <h2>
+            <i class="bi bi-gear-fill me-2"></i>Gestiones Administrativas
+        </h2>
+    </div>
+    <div class="row">
+        <!-- Gestión de Sucursales -->
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'gestion_sucursales' %}" class="text-decoration-none">
+                <div class="card border-info h-100 shadow-sm">
+                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                        <span>Sucursales</span>
+                        <i class="bi bi-building"></i>
+                    </div>
+                    <div class="card-body text-center">
                         <p class="card-text">Administrar sucursales</p>
                     </div>
-                </a>
-            </div>
-            <div class="col-md-3 mb-3">
-                <a href="{% url 'gestion_laboratorios' %}" class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Gestión de Laboratorios</h5>
+                </div>
+            </a>
+        </div>
+
+        <!-- Gestión de Laboratorios -->
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'gestion_laboratorios' %}" class="text-decoration-none">
+                <div class="card border-success h-100 shadow-sm">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <span>Laboratorios</span>
+                        <i class="bi bi-hospital"></i>
+                    </div>
+                    <div class="card-body text-center">
                         <p class="card-text">Administrar laboratorios</p>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
+        </div>
 
-            <div class="col-md-3 mb-3">
-                <a href="{% url 'listar_monodrogas' %}" class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Gestión de Monodrogas</h5>
+        <!-- Gestión de Monodrogas -->
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'listar_monodrogas' %}" class="text-decoration-none">
+                <div class="card border-warning h-100 shadow-sm">
+                    <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+                        <span>Monodrogas</span>
+                        <i class="bi bi-capsule"></i>
+                    </div>
+                    <div class="card-body text-center">
                         <p class="card-text">Administrar monodrogas</p>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
+        </div>
 
-            <div class="col-md-3 mb-3">
-                <a href="{% url 'gestion_medicamentos' %}" class="card text-center shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Gestión de Medicamentos</h5>
+        <!-- Gestión de Medicamentos -->
+        <div class="col-md-3 mb-3">
+            <a href="{% url 'gestion_medicamentos' %}" class="text-decoration-none">
+                <div class="card border-danger h-100 shadow-sm">
+                    <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                        <span>Medicamentos</span>
+                        <i class="bi bi-capsule"></i>
+                    </div>
+                    <div class="card-body text-center">
                         <p class="card-text">Administrar medicamentos</p>
                     </div>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
     </div>
+</div>
 {% endblock %}

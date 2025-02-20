@@ -165,6 +165,9 @@ class Pedido(models.Model):
     fecha_pedido = models.DateField()
     forma_pago = models.CharField(max_length=10, choices=FORMA_PAGO_CHOICES,
                                   help_text="Forma de pago de la orden de compra")
+    @property
+    def total(self):
+        return sum(item.medicamento.precio * item.cantidad for item in self.items.all())
     
     def __str__(self):
         return f"Pedido {self.id} - {self.sucursal.nombre}"
@@ -174,6 +177,7 @@ class PedidoItem(models.Model):
     Representa cada producto (medicamento) solicitado en un pedido.
     """
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name='items')
+    
     medicamento = models.ForeignKey('Medicamento', on_delete=models.CASCADE)
     cantidad = models.IntegerField()
     

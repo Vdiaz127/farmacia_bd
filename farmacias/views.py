@@ -24,10 +24,10 @@ def consulta_medicamento(request):
 def inicio_admin(request): 
     return render(request, 'admin/inicio.html', {'empleado': request.user})
 
-@login_required
-@role_required(['farmaceutico'])
-def inicio_farmaceutico(request):
-    return render(request, 'farmaceutico/inicio.html', {'empleado': request.user})
+# @login_required
+# @role_required(['farmaceutico'])
+# def inicio_farmaceutico(request):
+#     return render(request, 'farmaceutico/inicio.html', {'empleado': request.user})
 
 
 
