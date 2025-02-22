@@ -26,6 +26,7 @@ class Sucursal(models.Model):
     direccion = models.TextField()
     telefono = models.CharField(max_length=15)
 
+
     def __str__(self):
         return self.nombre
 
@@ -48,11 +49,12 @@ class Empleado(AbstractBaseUser):
     apellido = models.CharField(max_length=100)
     cedula = models.CharField(max_length=15, unique=True)
     fecha_nacimiento = models.DateField()
-    telefono = models.CharField(max_length=15, blank=True, null=True)
+    telefono = models.CharField(max_length=15)
     direccion = models.TextField(blank=True, null=True)
     fecha_ingreso = models.DateField()
     sucursal = models.ForeignKey(Sucursal, on_delete=models.SET_NULL, null=True, blank=True, related_name='empleados')
     cargo = models.CharField(max_length=20, choices=CARGOS, default='auxiliar')
+
 
     objects = EmpleadoManager()
 
@@ -69,10 +71,11 @@ class Laboratorio(models.Model):
     Se registra información de contacto y ubicación, como dirección, teléfono y email.
     """
     nombre = models.CharField(max_length=100, unique=True)
-    direccion = models.TextField()
-    telefono = models.CharField(max_length=15, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
-
+    direccion = models.TextField(unique=True)
+    telefono = models.CharField(max_length=15, unique=True)
+    email = models.EmailField(unique=True)
+    especialPassword = models.CharField(max_length=100)
+    
     def __str__(self):
         return self.nombre
 

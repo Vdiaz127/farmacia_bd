@@ -1,22 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="text-center mb-4">Gestión de Monodrogas</h1>
+<div class="container mt-5">
+    <!-- Título principal -->
+    <div class="text-center mb-4">
+        <h1 class="display-5">
+            <i class="bi bi-capsule me-2"></i>Gestión de Monodrogas
+        </h1>
+    </div>
 
     <!-- Botón para abrir el modal de creación -->
     <div class="d-flex justify-content-center mb-4">
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearMonodrogaModal">
-            Agregar Nueva Monodroga
+            <i class="bi bi-plus-circle me-1"></i> Agregar Nueva Monodroga
         </button>
     </div>
-    
+
     <!-- Modal de creación -->
     <div class="modal fade" id="crearMonodrogaModal" tabindex="-1" aria-labelledby="crearMonodrogaLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="crearMonodrogaLabel">Nueva Monodroga</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="crearMonodrogaLabel">
+                        <i class="bi bi-plus-circle me-1"></i>Nueva Monodroga
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="{% url 'agregar_monodroga' %}">
@@ -25,7 +33,11 @@
                             <label for="nombre" class="form-label">Nombre de la Monodroga</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <div class="modal-footer pt-0">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-1"></i>Guardar
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -33,15 +45,17 @@
     </div>
 
     {% if monodrogas %}
-    <div class="row">
+    <ul class="list-group">
         {% for monodroga in monodrogas %}
             <!-- Modal de edición -->
             <div class="modal fade" id="editarMonodrogaModal{{ monodroga.pk }}" tabindex="-1" aria-labelledby="editarMonodrogaLabel{{ monodroga.pk }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editarMonodrogaLabel{{ monodroga.pk }}">Editar Monodroga</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="editarMonodrogaLabel{{ monodroga.pk }}">
+                                <i class="bi bi-pencil-square me-1"></i>Editar Monodroga
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
                             <form method="POST" action="{% url 'editar_monodroga' monodroga.pk %}">
@@ -50,7 +64,11 @@
                                     <label for="nombre{{ monodroga.pk }}" class="form-label">Nombre de la Monodroga</label>
                                     <input type="text" class="form-control" id="nombre{{ monodroga.pk }}" name="nombre" value="{{ monodroga.nombre }}" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                <div class="modal-footer pt-0">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save me-1"></i>Guardar Cambios
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -61,9 +79,11 @@
             <div class="modal fade" id="eliminarMonodrogaModal{{ monodroga.pk }}" tabindex="-1" aria-labelledby="eliminarMonodrogaLabel{{ monodroga.pk }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="eliminarMonodrogaLabel{{ monodroga.pk }}">Eliminar Monodroga</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="eliminarMonodrogaLabel{{ monodroga.pk }}">
+                                <i class="bi bi-trash me-1"></i>Eliminar Monodroga
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
                             <p>¿Estás seguro de que deseas eliminar la monodroga <strong>{{ monodroga.nombre }}</strong>?</p>
@@ -71,7 +91,9 @@
                         <div class="modal-footer">
                             <form method="POST" action="{% url 'eliminar_monodroga' monodroga.pk %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="bi bi-trash me-1"></i>Eliminar
+                                </button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             </form>
                         </div>
@@ -79,23 +101,26 @@
                 </div>
             </div>
 
-            <!-- Tarjeta de Monodroga -->
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ monodroga.nombre }}</h5>
-                        <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarMonodrogaModal{{ monodroga.pk }}">Editar</button>
-                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarMonodrogaModal{{ monodroga.pk }}">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Elemento de la lista -->
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>
+                    <i class="bi bi-capsule me-2"></i>{{ monodroga.nombre }}
+                </span>
+                <span>
+                    <button type="button" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editarMonodrogaModal{{ monodroga.pk }}">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarMonodrogaModal{{ monodroga.pk }}">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </span>
+            </li>
         {% endfor %}
-    </div>
+    </ul>
     {% else %}
     <div class="mt-3 alert alert-warning text-center" role="alert">
         No hay monodrogas registradas aún. ¡Agrega una nueva!
     </div>
     {% endif %}
+</div>
 {% endblock %}

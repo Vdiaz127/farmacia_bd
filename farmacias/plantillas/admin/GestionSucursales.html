@@ -1,22 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="text-center mb-4">Gestión de Sucursales</h1>
+<div class="container mt-5">
+    <!-- Título principal -->
+    <div class="text-center mb-4">
+        <h1 class="display-5">
+            <i class="bi bi-building me-2"></i>Gestión de Sucursales
+        </h1>
+    </div>
 
     <!-- Botón para abrir el modal de creación -->
     <div class="d-flex justify-content-center mb-4">
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearSucursalModal">
-            Agregar Nueva Sucursal
+            <i class="bi bi-plus-circle me-1"></i>Agregar Nueva Sucursal
         </button>
     </div>
-    
+
     <!-- Modal de creación -->
     <div class="modal fade" id="crearSucursalModal" tabindex="-1" aria-labelledby="crearSucursalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="crearSucursalLabel">Nueva Sucursal</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="crearSucursalLabel">
+                        <i class="bi bi-plus-circle me-1"></i>Nueva Sucursal
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="{% url 'agregar_sucursal' %}">
@@ -37,25 +45,29 @@
                             <label for="telefono" class="form-label">Teléfono</label>
                             <input type="text" class="form-control" id="telefono" name="telefono" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <div class="modal-footer pt-0">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-1"></i>Guardar
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-  
-    <!-- Si no hay sucursales, mostrar un mensaje -->
-    {% if sucursales %}
-    <div class="row">
-        {% for sucursal in sucursales %}
 
-            <!-- Modal de edición (inicialmente oculto) -->
+    {% if sucursales %}
+    <ul class="list-group">
+        {% for sucursal in sucursales %}
+            <!-- Modal de edición -->
             <div class="modal fade" id="editarSucursalModal{{ sucursal.pk }}" tabindex="-1" aria-labelledby="editarSucursalLabel{{ sucursal.pk }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editarSucursalLabel{{ sucursal.pk }}">Editar Sucursal</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="editarSucursalLabel{{ sucursal.pk }}">
+                                <i class="bi bi-pencil-square me-1"></i>Editar Sucursal
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
                             <form method="POST" action="{% url 'editar_sucursal' sucursal.pk %}">
@@ -76,7 +88,11 @@
                                     <label for="telefono{{ sucursal.pk }}" class="form-label">Teléfono</label>
                                     <input type="text" class="form-control" id="telefono{{ sucursal.pk }}" name="telefono" value="{{ sucursal.telefono }}" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                <div class="modal-footer pt-0">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save me-1"></i>Guardar Cambios
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -87,9 +103,11 @@
             <div class="modal fade" id="eliminarSucursalModal{{ sucursal.pk }}" tabindex="-1" aria-labelledby="eliminarSucursalLabel{{ sucursal.pk }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="eliminarSucursalLabel{{ sucursal.pk }}">Eliminar Sucursal</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="eliminarSucursalLabel{{ sucursal.pk }}">
+                                <i class="bi bi-trash me-1"></i>Eliminar Sucursal
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
                             <p>¿Estás seguro de que deseas eliminar esta sucursal?</p>
@@ -106,31 +124,31 @@
                 </div>
             </div>
 
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <a href="{% url 'gestion_medicamento_sucursal' sucursal.pk %}" class="text-decoration-none text-dark">
-                            <h5 class="card-title">{{ sucursal.nombre }}</h5>
-                        </a>
-                        <p class="card-text">{{ sucursal.ciudad }}</p>
-                        <p class="card-text"><strong>Dirección:</strong> {{ sucursal.direccion }}</p>
-                        <p class="card-text"><strong>Teléfono:</strong> {{ sucursal.telefono }}</p>
-                        <div class="d-flex justify-content-between">
-                            <!-- Botón de editar -->
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarSucursalModal{{ sucursal.pk }}">Editar</button>
-                            
-                            <!-- Botón de eliminar -->
-                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarSucursalModal{{ sucursal.pk }}">Eliminar</button>
-                        </div>
-                    </div>
+            <!-- Elemento de la lista -->
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{% url 'gestion_medicamento_sucursal' sucursal.pk %}" class="fw-bold text-decoration-none text-dark">
+                        <i class="bi bi-building me-2"></i>{{ sucursal.nombre }}
+                    </a>
+                    <p class="mb-0"><small class="text-muted">{{ sucursal.ciudad }}</small></p>
+                    <p class="mb-0"><small><i class="bi bi-geo-alt me-1"></i>{{ sucursal.direccion }}</small></p>
+                    <p class="mb-0"><small><i class="bi bi-telephone me-1"></i>{{ sucursal.telefono }}</small></p>
                 </div>
-            </div>
+                <div>
+                    <button type="button" class="btn btn-primary btn-sm me-1" data-bs-toggle="modal" data-bs-target="#editarSucursalModal{{ sucursal.pk }}">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarSucursalModal{{ sucursal.pk }}">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </li>
         {% endfor %}
-    </div>
+    </ul>
     {% else %}
     <div class="mt-3 alert alert-warning text-center" role="alert">
         No hay sucursales registradas aún. ¡Agrega una nueva!
     </div>
     {% endif %}
-
+</div>
 {% endblock %}

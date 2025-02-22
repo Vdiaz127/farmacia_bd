@@ -1,62 +1,73 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1 class="text-center mb-4">Gestión de Laboratorios</h1>
+<div class="container mt-5">
+    <!-- Título principal -->
+    <div class="text-center mb-4">
+        <h1 class="display-5">
+            <i class="bi bi-building me-2"></i>Gestión de Laboratorios
+        </h1>
+    </div>
 
-    <!-- Botón para abrir el modal de creación -->
+    <!-- Botón para agregar nuevo laboratorio -->
     <div class="d-flex justify-content-center mb-4">
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearLaboratorioModal">
-            Agregar Nuevo Laboratorio
+            <i class="bi bi-plus-circle me-1"></i> Agregar Nuevo Laboratorio
         </button>
     </div>
-    
-    
+
     <!-- Modal de creación -->
     <div class="modal fade" id="crearLaboratorioModal" tabindex="-1" aria-labelledby="crearLaboratorioLabel" aria-hidden="true">
         <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="crearLaboratorioLabel">Nuevo Laboratorio</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="crearLaboratorioLabel">
+                        <i class="bi bi-plus-circle me-2"></i>Nuevo Laboratorio
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{% url 'agregar_laboratorio' %}">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre del Laboratorio</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccion" name="direccion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono</label>
+                            <input type="text" class="form-control" id="telefono" name="telefono" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="modal-footer pt-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save me-1"></i>Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="modal-body">
-            <form method="POST" action="{% url 'agregar_laboratorio' %}">
-                {% csrf_token %}
-                <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre del Laboratorio</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" required>
-                </div>
-                <div class="mb-3">
-                <label for="direccion" class="form-label">Dirección</label>
-                <input type="text" class="form-control" id="direccion" name="direccion" required>
-                </div>
-                <div class="mb-3">
-                <label for="telefono" class="form-label">Teléfono</label>
-                <input type="text" class="form-control" id="telefono" name="telefono" required>
-                </div>
-                <div class="mb-3">
-                <label for="email" class="form-label">Correo Electrónico</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </form>
-            </div>
-        </div>
         </div>
     </div>
-  
-    <!-- Si no hay laboratorios, mostrar un mensaje -->
+
     {% if laboratorios %}
     <div class="row">
         {% for laboratorio in laboratorios %}
-
-            <!-- Modal de edición (inicialmente oculto) -->
+            <!-- Modal de edición -->
             <div class="modal fade" id="editarLaboratorioModal{{ laboratorio.pk }}" tabindex="-1" aria-labelledby="editarLaboratorioLabel{{ laboratorio.pk }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editarLaboratorioLabel{{ laboratorio.pk }}">Editar Laboratorio</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="editarLaboratorioLabel{{ laboratorio.pk }}">
+                                <i class="bi bi-pencil-square me-2"></i>Editar Laboratorio
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
                             <form method="POST" action="{% url 'editar_laboratorio' laboratorio.pk %}">
@@ -77,7 +88,11 @@
                                     <label for="email{{ laboratorio.pk }}" class="form-label">Correo Electrónico</label>
                                     <input type="email" class="form-control" id="email{{ laboratorio.pk }}" name="email" value="{{ laboratorio.email }}" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                <div class="modal-footer pt-3">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save me-1"></i>Guardar Cambios
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -88,9 +103,11 @@
             <div class="modal fade" id="eliminarLaboratorioModal{{ laboratorio.pk }}" tabindex="-1" aria-labelledby="eliminarLaboratorioLabel{{ laboratorio.pk }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="eliminarLaboratorioLabel{{ laboratorio.pk }}">Eliminar Laboratorio</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="eliminarLaboratorioLabel{{ laboratorio.pk }}">
+                                <i class="bi bi-trash me-2"></i>Eliminar Laboratorio
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                         </div>
                         <div class="modal-body">
                             <p>¿Estás seguro de que deseas eliminar este laboratorio?</p>
@@ -100,27 +117,35 @@
                             <form action="{% url 'eliminar_laboratorio' laboratorio.pk %}" method="POST">
                                 {% csrf_token %}
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="bi bi-trash me-1"></i>Eliminar
+                                </button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Card del Laboratorio -->
             <div class="col-md-4 mb-3">
-                <div class="card">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-header bg-info text-black d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-building me-1"></i>{{ laboratorio.nombre }}
+                        </h5>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ laboratorio.nombre }}</h5>
-                        <p class="card-text">{{ laboratorio.direccion }}</p>
-                        <p class="card-text"><strong>Teléfono:</strong> {{ laboratorio.telefono }}</p>
-                        <p class="card-text"><strong>Email:</strong> {{ laboratorio.email }}</p>
-                        <div class="d-flex justify-content-between">
-                            <!-- Botón de editar -->
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarLaboratorioModal{{ laboratorio.pk }}">Editar</button>
-                            
-                            <!-- Botón de eliminar -->
-                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarLaboratorioModal{{ laboratorio.pk }}">Eliminar</button>
-                        </div>
+                        <p class="card-text"><i class="bi bi-geo-alt me-1"></i>{{ laboratorio.direccion }}</p>
+                        <p class="card-text"><i class="bi bi-telephone me-1"></i><strong>Teléfono:</strong> {{ laboratorio.telefono }}</p>
+                        <p class="card-text"><i class="bi bi-envelope me-1"></i><strong>Email:</strong> {{ laboratorio.email }}</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarLaboratorioModal{{ laboratorio.pk }}">
+                            <i class="bi bi-pencil-square me-1"></i>Editar
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarLaboratorioModal{{ laboratorio.pk }}">
+                            <i class="bi bi-trash me-1"></i>Eliminar
+                        </button>
                     </div>
                 </div>
             </div>
@@ -131,5 +156,5 @@
         No hay laboratorios registrados aún. ¡Agrega uno nuevo!
     </div>
     {% endif %}
-
+</div>
 {% endblock %}

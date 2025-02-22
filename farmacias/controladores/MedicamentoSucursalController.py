@@ -73,11 +73,19 @@ def agregar_medicamento_sucursal(request):
         if existing_record:
             # Si existe, se incrementa la cantidad
             existing_record.cantidad += cantidad_nueva
-            existing_record.save()
-            messages.success(request, "La cantidad del medicamento en sucursal fue actualizada correctamente.")
+            if existing_record.cantidad <= 0:
+                print("Cantidad no válida, eliminando registro.")
+                existing_record.delete()
+                messages.success(request, "El medicamento en sucursal fue eliminado debido a cantidad no válida.")
+            else:
+                existing_record.save()
+                messages.success(request, "La cantidad del medicamento en sucursal fue actualizada correctamente.")
             return redirect('gestion_medicamento_sucursal', pk=sucursal_id)
         else:
             # Si no existe, se crea un registro nuevo
+            if cantidad_nueva <= 0:
+                messages.error(request, "La cantidad debe ser mayor a cero para agregar un nuevo medicamento.")
+                return redirect('gestion_medicamento_sucursal', pk=sucursal_id)
             form = MedicamentoSucursalForm(data)
             if form.is_valid():
                 try:
@@ -94,6 +102,9 @@ def agregar_medicamento_sucursal(request):
                 return redirect('gestion_medicamento_sucursal', pk=int(sucursal_id))
     else:
         return redirect('gestion_sucursal')
+    
+
+
 
 @login_required
 @role_required(['admin'])
