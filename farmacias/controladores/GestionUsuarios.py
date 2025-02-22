@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
-from ..models import Empleado, Sucursal
+from ..models import Empleado, Sucursal, HistorialEmpleado
 from django.db import IntegrityError
 
 def role_required(allowed_roles):
@@ -92,6 +92,15 @@ def registrar_empleado(request):
             empleado.set_password(password)  # Encriptar la contraseña
             empleado.save()
             messages.success(request, "Empleado registrado con éxito.")
+
+            #Creamos el primer registro del usuario:
+            historial = HistorialEmpleado.objects.create(
+                empleado=empleado,
+                sucursal=sucursal,
+                fecha_inicio=fecha_ingreso,
+                cargo=cargo
+            )
+            historial.save()
             return redirect('login')  # Redirigir a la página de login o donde prefieras
         except IntegrityError:
             messages.error(request, "Ocurrió un error al registrar el empleado. Intente nuevamente.")

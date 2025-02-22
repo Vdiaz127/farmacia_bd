@@ -28,6 +28,8 @@ from farmacias.controladores.MonodrogaController import *
 from farmacias.controladores.farmaceutico.InicioFarmaceuticoController import *
 from farmacias.controladores.farmaceutico.PedidosController import *
 
+from farmacias.controladores.HistorialEmpleadoController import *
+
 
 urlpatterns = [ 
     
@@ -71,10 +73,13 @@ urlpatterns = [
     path('agregar_medicamento_sucursal/', agregar_medicamento_sucursal, name='agregar_medicamento_sucursal'),
 
 
+    path("historial/", get_historial, name="get_historial"),
+    path("historial/<int:sucursal>", get_historial, name="get_historial"),
+
     #USUARIO: FARMAUCETICO
     path('farmaceutico/', inicio_farmaceutico, name='inicio_farmaceutico'),
     path('crear_pedido/', crear_pedido, name='crear_pedido'),
     path('editar_pedido/<int:pedido_id>/', editar_pedido, name='editar_pedido'),
     path('eliminar_pedido_pedido/<int:pedido_id>/', eliminar_pedido, name='eliminar_pedido'),
-   
+
 ]

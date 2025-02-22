@@ -4,7 +4,7 @@ migrations
 __pycache__/
 *.py[cod]
 *$py.class
-*/cadena_farmacias/settings.py
+
 .vscode/
 
 # Distribution / packaging
@@ -137,4 +137,5 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-*settings.py
+# *settings.py
+/cadena_farmacias/settings.py

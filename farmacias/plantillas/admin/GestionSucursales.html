@@ -135,6 +135,11 @@
                     <p class="mb-0"><small><i class="bi bi-telephone me-1"></i>{{ sucursal.telefono }}</small></p>
                 </div>
                 <div>
+
+                    <a href="{% url 'get_historial' sucursal.pk %}" class="btn btn-success btn-sm me-1">
+                        <i class="bi bi-person"></i>
+                        <span>Empleados</span>
+                    </a>
                     <button type="button" class="btn btn-primary btn-sm me-1" data-bs-toggle="modal" data-bs-target="#editarSucursalModal{{ sucursal.pk }}">
                         <i class="bi bi-pencil-square"></i>
                     </button>

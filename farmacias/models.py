@@ -80,7 +80,7 @@ class Laboratorio(models.Model):
         return self.nombre
 
 
-class Historial_empleado(models.Model):
+class HistorialEmpleado(models.Model):
     """
     Representa el historial de cargos que ha tenido un empleado en diferentes sucursales.
     Se registra el cargo desempeñado, la fecha de inicio y la fecha de fin de cada período.
