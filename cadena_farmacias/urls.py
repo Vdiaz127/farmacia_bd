@@ -75,6 +75,7 @@ urlpatterns = [
 
     path("historial/", get_historial, name="get_historial"),
     path("historial/<int:sucursal>", get_historial, name="get_historial"),
+    path("agregar_historial_empleado/", agregar_historial_empleado, name="agregar_historial_empleado"),
 
     #USUARIO: FARMAUCETICO
     path('farmaceutico/', inicio_farmaceutico, name='inicio_farmaceutico'),
