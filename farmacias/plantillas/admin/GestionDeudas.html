@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Encabezado Principal -->
+    <div class="text-center mb-4">
+        <h1 class="display-4">
+            <i class="bi bi-currency-dollar me-2"></i>Gestión de Deudas
+        </h1>
+        <p class="lead">Administra las deudas de las sucursales</p>
+    </div>
+
+    <!-- Iteramos sobre cada sucursal y sus deudas -->
+    {% for deuda in deudas %}
+    <div class="mb-5">
+        <h2>Deudas de {{ deuda.sucursal.nombre }}</h2>
+        
+        {% if deuda.compras_deuda or deuda.pedidos_deuda %}
+            <!-- Tabla de Deudas de Compras -->
+            {% if deuda.compras_deuda %}
+            <div class="table-responsive mb-4">
+                <h3>Deudas de Compras</h3>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Forma de Pago</th>
+                            <th scope="col">Fecha de Pago</th>
+                            <th scope="col"><i class="bi bi-file-earmark-pdf"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for compra in deuda.compras_deuda %}
+                        <tr>
+                            <th scope="row">{{ compra.id }}</th>
+                            <td>${{ compra.monto_total }}</td>
+                            <td>{{ compra.fecha_compra }}</td>
+                            <td>{{ compra.forma_pago }}</td>
+                            <td class="{% if compra.fecha_pago < today %}text-danger{% endif %}">
+                                {{ compra.fecha_pago }}
+                            </td>
+                            <td><i class="bi bi-file-earmark-pdf"></i></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+
+            <!-- Tabla de Deudas de Pedidos -->
+            {% if deuda.pedidos_deuda %}
+            <div class="table-responsive">
+                <h3>Deudas de Pedidos</h3>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-primary">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Forma de Pago</th>
+                            <th scope="col">Fecha de Pago</th>
+                            <th scope="col"><i class="bi bi-file-earmark-pdf"></i></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pedido in deuda.pedidos_deuda %}
+                        <tr>
+                            <th scope="row">{{ pedido.id }}</th>
+                            <td>${{ pedido.total }}</td>
+                            <td>{{ pedido.fecha_pedido }}</td>
+                            <td>{{ pedido.forma_pago }}</td>
+                            <td class="{% if pedido.fecha_pago < today %}text-danger{% endif %}">
+                                {{ pedido.fecha_pago }}
+                            </td>
+                            <td><i class="bi bi-file-earmark-pdf"></i></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        {% else %}
+            <p>No hay deudas registradas en esta sucursal.</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

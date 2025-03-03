@@ -7,17 +7,23 @@ from farmacias.models import Laboratorio
 from django import forms
 
 from django.contrib import messages
+import random
+import string
 
 class LaboratorioForm(forms.ModelForm):
     class Meta:
         model = Laboratorio
-        fields = '__all__'
+        fields = ['nombre', 'direccion', 'telefono', 'email']
 
 @login_required
 @role_required(['admin'])
 def gestion_laboratorios(request):
     laboratorios = Laboratorio.objects.all()
     return render(request, 'admin/GestionLaboratorio.html', {'laboratorios': laboratorios})
+
+def generar_contraseña_aleatoria(length=12):
+    caracteres = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(random.choice(caracteres) for i in range(length))
 
 @login_required
 @role_required(['admin'])
@@ -26,7 +32,9 @@ def agregar_laboratorio(request):
         form = LaboratorioForm(request.POST)
         if form.is_valid():
             try:
-                form.save()
+                laboratorio = form.save(commit=False)
+                laboratorio.especialPassword = generar_contraseña_aleatoria()
+                laboratorio.save()
                 messages.success(request, "Laboratorio agregado correctamente.")
                 return redirect('gestion_laboratorios')  # Redirige al listado de laboratorios
             except IntegrityError:
