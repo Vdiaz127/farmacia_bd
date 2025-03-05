@@ -47,6 +47,7 @@ urlpatterns = [
 
     #LABORATORIOS
     path('gestion_laboratorios/', gestion_laboratorios , name='gestion_laboratorios'),
+    path('gestion_laboratorios/pdf', gestion_laboratorios_pdf , name='gestion_laboratorios_pdf'),
     path('agregar-laboratorio/', agregar_laboratorio, name='agregar_laboratorio'),
     path('editar-laboratorio/<int:pk>/', editar_laboratorio, name='editar_laboratorio'),
     path('eliminar-laboratorio/<int:pk>/', eliminar_laboratorio, name='eliminar_laboratorio'),
@@ -78,6 +79,7 @@ urlpatterns = [
 
     path("historial/", get_historial, name="get_historial"),
     path("historial/<int:sucursal>", get_historial, name="get_historial"),
+    path("historial/pdf/", get_historial_pdf, name="get_historial_pdf"),
 
     #USUARIO: FARMAUCETICO
     path('farmaceutico/', inicio_farmaceutico, name='inicio_farmaceutico'),
