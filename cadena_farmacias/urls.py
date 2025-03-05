@@ -23,13 +23,14 @@ from farmacias.controladores.MedicamentosController import *
 from farmacias.controladores.SucursalesController import *
 from farmacias.controladores.MedicamentoSucursalController import *
 from farmacias.controladores.MonodrogaController import *
-
+from farmacias.controladores.DeudasController import *
 
 from farmacias.controladores.farmaceutico.InicioFarmaceuticoController import *
 from farmacias.controladores.farmaceutico.PedidosController import *
 
 from farmacias.controladores.HistorialEmpleadoController import *
 
+from farmacias.controladores.laboratorio.GestionarCompra import *
 
 urlpatterns = [ 
     
@@ -46,6 +47,7 @@ urlpatterns = [
 
     #LABORATORIOS
     path('gestion_laboratorios/', gestion_laboratorios , name='gestion_laboratorios'),
+    path('gestion_laboratorios/pdf', gestion_laboratorios_pdf , name='gestion_laboratorios_pdf'),
     path('agregar-laboratorio/', agregar_laboratorio, name='agregar_laboratorio'),
     path('editar-laboratorio/<int:pk>/', editar_laboratorio, name='editar_laboratorio'),
     path('eliminar-laboratorio/<int:pk>/', eliminar_laboratorio, name='eliminar_laboratorio'),
@@ -72,10 +74,13 @@ urlpatterns = [
     path('gestion_medicamento_sucursal/<int:pk>', gestion_medicamento_sucursal, name='gestion_medicamento_sucursal'),
     path('agregar_medicamento_sucursal/', agregar_medicamento_sucursal, name='agregar_medicamento_sucursal'),
 
+    #DEUDAS
+    path('gestion_deudas/', gestion_deudas, name='gestion_deudas'),
 
     path("historial/", get_historial, name="get_historial"),
     path("historial/<int:sucursal>", get_historial, name="get_historial"),
     path("agregar_historial_empleado/", agregar_historial_empleado, name="agregar_historial_empleado"),
+    path("historial/pdf/", get_historial_pdf, name="get_historial_pdf"),
 
     #USUARIO: FARMAUCETICO
     path('farmaceutico/', inicio_farmaceutico, name='inicio_farmaceutico'),
@@ -83,4 +88,7 @@ urlpatterns = [
     path('editar_pedido/<int:pedido_id>/', editar_pedido, name='editar_pedido'),
     path('eliminar_pedido_pedido/<int:pedido_id>/', eliminar_pedido, name='eliminar_pedido'),
 
+    #LABORATORIOS
+    path('laboratorio_procesar_pedido', procesar_pedido, name='laboratorio_procesar_pedido'),
+    path('procesar_comprar/<int:pk>',procesar_compra,name="procesar_compra")
 ]

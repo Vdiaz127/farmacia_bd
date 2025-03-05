@@ -45,6 +45,15 @@
                             <label for="email" class="form-label">Correo Electrónico</label>
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="especialPassword" class="form-label">Contraseña Especial</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="especialPassword" name="especialPassword" required>
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('especialPassword', null)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
                         <div class="modal-footer pt-3">
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-save me-1"></i>Guardar
@@ -88,6 +97,7 @@
                                     <label for="email{{ laboratorio.pk }}" class="form-label">Correo Electrónico</label>
                                     <input type="email" class="form-control" id="email{{ laboratorio.pk }}" name="email" value="{{ laboratorio.email }}" required>
                                 </div>
+
                                 <div class="modal-footer pt-3">
                                     <button type="submit" class="btn btn-primary">
                                         <i class="bi bi-save me-1"></i>Guardar Cambios
@@ -138,7 +148,15 @@
                         <p class="card-text"><i class="bi bi-geo-alt me-1"></i>{{ laboratorio.direccion }}</p>
                         <p class="card-text"><i class="bi bi-telephone me-1"></i><strong>Teléfono:</strong> {{ laboratorio.telefono }}</p>
                         <p class="card-text"><i class="bi bi-envelope me-1"></i><strong>Email:</strong> {{ laboratorio.email }}</p>
+                        <p class="card-text">
+                            <i class="bi bi-key me-1"></i><strong>Contraseña Especial:</strong> 
+                            <span id="especialPassword{{ laboratorio.pk }}" class="me-2">********</span>
+                            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="togglePasswordVisibility('especialPassword{{ laboratorio.pk }}', '{{ laboratorio.especialPassword }}')">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </p>
                     </div>
+                    
                     <div class="card-footer d-flex justify-content-between">
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarLaboratorioModal{{ laboratorio.pk }}">
                             <i class="bi bi-pencil-square me-1"></i>Editar
@@ -157,4 +175,17 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+function togglePasswordVisibility(fieldId, password = null) {
+    const field = document.getElementById(fieldId);
+    const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
+    field.setAttribute('type', type);
+    if (password !== null && type === 'text') {
+        field.textContent = password;
+    } else if (password !== null && type === 'password') {
+        field.textContent = '********';
+    }
+}
+</script>
 {% endblock %}
