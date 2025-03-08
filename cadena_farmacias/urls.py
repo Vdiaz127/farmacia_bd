@@ -71,16 +71,18 @@ urlpatterns = [
     path('eliminar-sucursales/<int:pk>/', eliminar_sucursal, name='eliminar_sucursal'),
 
     #MEDICAMENTOS EN SUCURSALES
-    path('gestion_medicamento_sucursal/<int:pk>', gestion_medicamento_sucursal, name='gestion_medicamento_sucursal'),
     path('agregar_medicamento_sucursal/', agregar_medicamento_sucursal, name='agregar_medicamento_sucursal'),
+    path('gestion_medicamento_sucursal/<int:pk>', gestion_medicamento_sucursal, name='gestion_medicamento_sucursal'),
 
     #DEUDAS
     path('gestion_deudas/', gestion_deudas, name='gestion_deudas'),
 
+    #HISTORIAL DE EMPLEADOS
     path("historial/", get_historial, name="get_historial"),
     path("historial/<int:sucursal>", get_historial, name="get_historial"),
     path("agregar_historial_empleado/", agregar_historial_empleado, name="agregar_historial_empleado"),
     path("historial/pdf/", get_historial_pdf, name="get_historial_pdf"),
+    path("historial/pdf/<int:sucursal>", get_historial_pdf, name="get_historial_pdf"),
 
     #USUARIO: FARMAUCETICO
     path('farmaceutico/', inicio_farmaceutico, name='inicio_farmaceutico'),

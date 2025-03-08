@@ -5,16 +5,13 @@
     <!-- Título principal -->
     <div class="text-center mb-4">
         <h1 class="display-5">
-            <i class="bi bi-person-lines-fill me-2"></i>Gestión de Historial de Empleados
+            <i class="bi bi-person-lines-fill me-2"></i>Gestión de Empleados 
+            {% if sucursal_name %}
+                - {{ sucursal_name}}
+            {% endif %}
         </h1>
     </div>
 
-    <!-- Botón para abrir el modal de creación -->
-    <div class="d-flex justify-content-center mb-4">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarHistorialEmpleadoModal">
-            <i class="bi bi-plus-circle me-1"></i>Agregar Historial de Empleado
-        </button>
-    </div>
 
     <!-- Modal de creación -->
      {% if historiales %}
@@ -103,10 +100,14 @@
                             <td>{{ historial.fecha_inicio }}</td>
                             <td>{{ historial.fecha_fin }}</td>
                             <td>
-                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#agregarHistorialEmpleadoModal{{ historial.pk }}">
-                                    <i class="bi bi-pencil-square"></i>
-                                    <span>Cambiar de Sucursal</span>
-                                </button>
+                                {% if historial.estado %}
+                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#agregarHistorialEmpleadoModal{{ historial.pk }}">
+                                        <i class="bi bi-pencil-square"></i>
+                                        <span>Cambiar de Sucursal</span>
+                                    </button>
+                                {% else %}
+                                    <span class="text-danger">Finalizado</span>
+                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}

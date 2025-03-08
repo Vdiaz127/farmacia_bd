@@ -88,6 +88,7 @@ class HistorialEmpleado(models.Model):
     empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
     sucursal = models.ForeignKey(Sucursal, on_delete=models.CASCADE)
     cargo = models.CharField(max_length=100)
+    estado = models.BooleanField(default=True)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField(null=True, blank=True)
 

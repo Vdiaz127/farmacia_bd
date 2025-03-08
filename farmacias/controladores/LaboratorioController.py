@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from farmacias.controladores.GestionUsuarios import *
 from farmacias.models import Laboratorio
-from farmacias.utils import render_to_pdf
+from farmacias.utils import render_to_pdf_wkhtmltopdf
 from django import forms
 
 from django.contrib import messages
@@ -22,10 +22,9 @@ def gestion_laboratorios(request):
     laboratorios = Laboratorio.objects.all()
     return render(request, 'admin/GestionLaboratorio.html', {'laboratorios': laboratorios})
 
-@render_to_pdf
 def gestion_laboratorios_pdf(request):
     laboratorios = Laboratorio.objects.all()
-    return ('admin/GestionLaboratorio.html', {'laboratorios': laboratorios})
+    return render_to_pdf_wkhtmltopdf(request, 'admin/GestionLaboratorio.html', {'laboratorios': laboratorios})
 
 
 def generar_contraseña_aleatoria(length=12):
