@@ -2,21 +2,21 @@
 
 {% block content %}
 <div class="container mt-4">
+
     <!-- Título principal -->
     <div class="text-center mb-4">
         <h1 class="display-5">
             <i class="bi bi-person-lines-fill me-2"></i>Gestión de Empleados 
             {% if sucursal_name %}
-                - {{ sucursal_name}}
+                - {{ sucursal_name }}
             {% endif %}
         </h1>
     </div>
 
-
     <!-- Modal de creación -->
-     {% if historiales %}
+    {% if historiales %}
         {% for historial in historiales %}
-            <div class="modal fade" id="agregarHistorialEmpleadoModal{{ historial.pk }}" tabindex="-1" aria-labelledby="agregarHistorialEmpleadoLabel{{historial.pk}}" aria-hidden="true">
+            <div class="modal fade" id="agregarHistorialEmpleadoModal{{ historial.pk }}" tabindex="-1" aria-labelledby="agregarHistorialEmpleadoLabel{{ historial.pk }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header bg-primary text-white">
@@ -31,7 +31,7 @@
                                 <input type="hidden" name="historial" value="{{ historial.pk }}">
                                 <input type="hidden" name="empleado" value="{{ historial.empleado.id }}">
                                 <div class="mb-3">
-                                    <label for="empleado-tag" class="form-label">Empleado</label>
+                                    <label for="empleado-tag" class="form-label"><b>Empleado: </b></label>
                                     <span name="empleado-tag">{{ historial.empleado.nombre }} {{ historial.empleado.apellido }}</span>
                                 </div>
                                 <div class="mb-3">
@@ -46,7 +46,7 @@
                                     <label for="cargo" class="form-label">Cargo</label>
                                     <select id="cargo" name="cargo" class="form-select" required>
                                         {% for k, v in cargos %}
-                                            <option value="{{ k }}">{{v}}</option>
+                                            <option value="{{ k }}">{{ v }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -69,7 +69,7 @@
                 </div>
             </div>
         {% endfor %}
-     {% endif %}
+    {% endif %}
 
     <!-- Listado de historial de empleados -->
     <div class="card shadow-sm">

@@ -143,7 +143,7 @@
                         <p class="card-text">
                             <i class="bi bi-key me-1"></i><strong>Contraseña Especial:</strong> 
                             <span id="especialPassword{{ laboratorio.pk }}" class="me-2">********</span>
-                            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="togglePasswordVisibility('especialPassword{{ laboratorio.pk }}', '{{ laboratorio.especialPassword }}')">
+                            <button class="btn btn-outline-secondary btn-sm" type="button" onclick="togglePasswordVisibility('especialPassword{{ laboratorio.pk }}', '{{ laboratorio.especialPassword|escapejs }}')">
                                 <i class="bi bi-eye"></i>
                             </button>
                         </p>
@@ -171,11 +171,10 @@
 <script>
 function togglePasswordVisibility(fieldId, password = null) {
     const field = document.getElementById(fieldId);
-    const type = field.getAttribute('type') === 'password' ? 'text' : 'password';
-    field.setAttribute('type', type);
-    if (password !== null && type === 'text') {
+    // Si el contenido es la máscara, se muestra la contraseña real, y viceversa
+    if (field.textContent.trim() === '********') {
         field.textContent = password;
-    } else if (password !== null && type === 'password') {
+    } else {
         field.textContent = '********';
     }
 }
