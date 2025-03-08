@@ -28,6 +28,7 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Forma de Pago</th>
                             <th scope="col">Fecha de Pago</th>
+                            <th scope="col">Emisor</th>
                             <th scope="col"><i class="bi bi-file-earmark-pdf"></i></th>
                         </tr>
                     </thead>
@@ -41,6 +42,7 @@
                             <td class="{% if compra.fecha_pago < today %}text-danger{% endif %}">
                                 {{ compra.fecha_pago }}
                             </td>
+                            <td>{{ compra.pedido.empleado.nombre }} {{ compra.pedido.empleado.apellido }}</td>
                             <td><i class="bi bi-file-earmark-pdf"></i></td>
                         </tr>
                         {% endfor %}
@@ -61,6 +63,7 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Forma de Pago</th>
                             <th scope="col">Fecha de Pago</th>
+                            <th scope="col">Emisor</th>
                             <th scope="col"><i class="bi bi-file-earmark-pdf"></i></th>
                         </tr>
                     </thead>
@@ -74,6 +77,7 @@
                             <td class="{% if pedido.fecha_pago < today %}text-danger{% endif %}">
                                 {{ pedido.fecha_pago }}
                             </td>
+                            <td>{{ pedido.empleado.nombre }} {{ pedido.empleado.apellido }}</td>
                             <td><i class="bi bi-file-earmark-pdf"></i></td>
                         </tr>
                         {% endfor %}
