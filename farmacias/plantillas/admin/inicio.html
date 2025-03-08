@@ -24,9 +24,7 @@
                         <li><i class="bi bi-envelope me-2"></i><strong>Correo:</strong> {{ empleado.email }}</li>
                         <li><i class="bi bi-credit-card-2-front me-2"></i><strong>Cédula:</strong> {{ empleado.cedula }}</li>
                         <li><i class="bi bi-briefcase me-2"></i><strong>Cargo:</strong> {{ empleado.get_cargo_display }}</li>
-                        <li>
-                            <i class="bi bi-building me-2"></i>
-                            <strong>Sucursal:</strong> 
+                        <li><i class="bi bi-building me-2"></i><strong>Sucursal:</strong> 
                             {% if empleado.sucursal %}{{ empleado.sucursal.nombre }}{% else %}No asignada{% endif %}
                         </li>
                     </ul>

@@ -4,11 +4,12 @@ from farmacias.models import Sucursal, Medicamento_Sucursal
 from django.contrib.auth.decorators import login_required
 from farmacias.controladores.GestionUsuarios import *
 
-from farmacias.models import Medicamento_Sucursal
+from farmacias.models import Medicamento_Sucursal, Sucursal
 
 def consulta_medicamento(request):
     query = request.GET.get('q', '')
     resultados = None
+    sucursales = Sucursal.objects.all()
     if query:
         # Se filtran los registros de Medicamento_Sucursal por el nombre del medicamento
         resultados = Medicamento_Sucursal.objects.filter(
@@ -16,7 +17,8 @@ def consulta_medicamento(request):
         ).select_related('sucursal', 'medicamento', 'laboratorio')
     return render(request, 'publico/ConsultaMedicamento.html', {
         'query': query,
-        'resultados': resultados
+        'resultados': resultados,
+        'sucursales': sucursales
     })
 
 @login_required
