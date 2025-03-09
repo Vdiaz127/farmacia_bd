@@ -20,8 +20,10 @@ def calculate_due_date(fecha, forma_pago):
 @role_required(['admin'])
 def gestion_deudas(request):
     # Obtención de compras y pedidos que no sean de contado.
-    compras_deuda = Compra.objects.exclude(forma_pago='contado')
-    pedidos_deuda = Pedido.objects.exclude(forma_pago='contado')
+    #compras_deuda = Compra.objects.exclude(forma_pago='contado')
+    #pedidos_deuda = Pedido.objects.exclude(forma_pago='contado')
+    compras_deuda = Compra.objects.all()
+    pedidos_deuda = Pedido.objects.all()
     sucursales = Sucursal.objects.all()
 
     # Calculamos la fecha de pago para cada registro.

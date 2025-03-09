@@ -29,7 +29,7 @@
                             <th scope="col">Forma de Pago</th>
                             <th scope="col">Fecha de Pago</th>
                             <th scope="col">Emisor</th>
-                            <th scope="col"><i class="bi bi-file-earmark-pdf"></i></th>
+                            <th scope="col">Factura</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,7 +43,11 @@
                                 {{ compra.fecha_pago }}
                             </td>
                             <td>{{ compra.pedido.empleado.nombre }} {{ compra.pedido.empleado.apellido }}</td>
-                            <td><i class="bi bi-file-earmark-pdf"></i></td>
+                            <td>
+                                <a href="{% url 'factura_compra_pdf' compra.id %}" class="btn btn-danger btn-sm" target="_blank">
+                                    <i class="bi bi-file-earmark-pdf"></i> Descargar
+                                </a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -64,7 +68,7 @@
                             <th scope="col">Forma de Pago</th>
                             <th scope="col">Fecha de Pago</th>
                             <th scope="col">Emisor</th>
-                            <th scope="col"><i class="bi bi-file-earmark-pdf"></i></th>
+                            <th scope="col">Factura</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,7 +82,11 @@
                                 {{ pedido.fecha_pago }}
                             </td>
                             <td>{{ pedido.empleado.nombre }} {{ pedido.empleado.apellido }}</td>
-                            <td><i class="bi bi-file-earmark-pdf"></i></td>
+                            <td>
+                                <a href="{% url 'factura_pedido_pdf' pedido.id %}" class="btn btn-danger btn-sm" target="_blank">
+                                    <i class="bi bi-file-earmark-pdf"></i> Descargar
+                                </a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

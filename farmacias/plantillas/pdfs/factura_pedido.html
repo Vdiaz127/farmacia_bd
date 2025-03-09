@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Factura de Pedido</title>
+    <style>
+        /* Configuración de la página: A4 con márgenes de 20mm */
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+        /* Estilos globales */
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        /* Contenedor principal, se ajusta al área definida en @page */
+        .invoice-container {
+            width: 100%;
+            box-sizing: border-box;
+            background: #fff;
+            padding: 0;
+        }
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 15mm;
+            padding: 0 10mm;
+        }
+        .invoice-header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            color: #2c3e50;
+        }
+        .invoice-header p {
+            font-size: 1em;
+            margin: 5px 0;
+        }
+        .section-title {
+            font-size: 1.2em;
+            color: #2c3e50;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+            margin-bottom: 5mm;
+        }
+        .invoice-section {
+            margin-bottom: 10mm;
+            padding: 0 10mm;
+        }
+        .invoice-section p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        .invoice-section p strong {
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5mm;
+        }
+        table thead {
+            background-color: #2c3e50;
+            color: #fff;
+        }
+        table thead th {
+            padding: 8px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        table tbody tr {
+            border-bottom: 1px solid #ddd;
+        }
+        table tbody td {
+            padding: 8px;
+            font-size: 0.9em;
+        }
+        table tbody tr:last-child {
+            border-bottom: 2px solid #2c3e50;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.9em;
+            color: #555;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 5mm;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Encabezado de la factura -->
+        <header class="invoice-header">
+            <h1>Factura de Pedido</h1>
+            <p><strong>Fecha:</strong> {{ fecha_actual }}</p>
+        </header>
+        
+        <!-- Datos del pedido -->
+        <section class="invoice-section">
+            <div class="section-title">Datos del Pedido</div>
+            <p><strong>ID Pedido:</strong> {{ pedido.id }}</p>
+            <p><strong>Laboratorio:</strong> {{ pedido.laboratorio.nombre }}</p>
+            <p><strong>Fecha de Pedido:</strong> {{ pedido.fecha_pedido }}</p>
+            <p><strong>Forma de Pago:</strong> {{ pedido.forma_pago }}</p>
+            <p><strong>Total:</strong> ${{ pedido.total }}</p>
+            <p><strong>Sucursal:</strong> {{ pedido.sucursal.nombre }}</p>
+            <p><strong>Empleado:</strong> {{ pedido.empleado.nombre }} {{ pedido.empleado.apellido }} <b>Cedula:</b> {{pedido.empleado.cedula }}</p>
+        </section>
+        
+        <!-- Detalle de los Items -->
+        <section class="invoice-section">
+            <div class="section-title">Detalle de Productos</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Medicamento</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.medicamento.nombre }}</td>
+                        <td>{{ item.cantidad }}</td>
+                        <td>$ {{ item.precio_unitario }}</td>
+                        <td>$ {{ item.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        
+        <!-- Pie de página -->
+        <footer>
+            <p>Gracias por su pedido.</p>
+        </footer>
+    </div>
+</body>
+</html>

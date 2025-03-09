@@ -47,7 +47,7 @@ class Empleado(AbstractBaseUser):
     email = models.EmailField(unique=True)
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
-    cedula = models.CharField(max_length=15, unique=True)
+    cedula = models.CharField(max_length=15, unique=True, primary_key=True)
     fecha_nacimiento = models.DateField()
     telefono = models.CharField(max_length=15)
     direccion = models.TextField(blank=True, null=True)

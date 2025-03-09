@@ -29,7 +29,7 @@
                             <form method="POST" action="{% url 'agregar_historial_empleado' %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="historial" value="{{ historial.pk }}">
-                                <input type="hidden" name="empleado" value="{{ historial.empleado.id }}">
+                                <input type="hidden" name="empleado" value="{{ historial.empleado.cedula }}">
                                 <div class="mb-3">
                                     <label for="empleado-tag" class="form-label"><b>Empleado: </b></label>
                                     <span name="empleado-tag">{{ historial.empleado.nombre }} {{ historial.empleado.apellido }}</span>

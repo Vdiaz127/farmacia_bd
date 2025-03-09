@@ -32,6 +32,8 @@ from farmacias.controladores.HistorialEmpleadoController import *
 
 from farmacias.controladores.laboratorio.GestionarCompra import *
 
+from farmacias.controladores.pdfs import *
+
 urlpatterns = [ 
     
     #PUBLICO
@@ -54,7 +56,6 @@ urlpatterns = [
 
     #LABORATORIOS
     path('gestion_laboratorios/', gestion_laboratorios , name='gestion_laboratorios'),
-    path('gestion_laboratorios/pdf', gestion_laboratorios_pdf , name='gestion_laboratorios_pdf'),
     path('agregar-laboratorio/', agregar_laboratorio, name='agregar_laboratorio'),
     path('editar-laboratorio/<int:pk>/', editar_laboratorio, name='editar_laboratorio'),
     path('eliminar-laboratorio/<int:pk>/', eliminar_laboratorio, name='eliminar_laboratorio'),
@@ -99,5 +100,9 @@ urlpatterns = [
 
     #LABORATORIOS
     path('laboratorio_procesar_pedido', procesar_pedido, name='laboratorio_procesar_pedido'),
-    path('procesar_comprar/<int:pk>',procesar_compra,name="procesar_compra")
+    path('procesar_comprar/<int:pk>',procesar_compra,name="procesar_compra"),
+
+    #pdfs / facturas
+    path('factura/compra/<int:compra_id>', factura_compra_pdf , name='factura_compra_pdf'),
+    path('factura/pedido/<int:pedido_id>', factura_pedido_pdf , name='factura_pedido_pdf'),
 ]

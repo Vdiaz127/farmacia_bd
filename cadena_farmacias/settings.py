@@ -29,6 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'farmacias',
-    'wkhtmltopdf',
 ]
 
 MIDDLEWARE = [
@@ -132,6 +132,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "/login/"  # Redirige a esta URL si intenta acceder a una página protegida
 LOGIN_REDIRECT_URL = "/"  # Redirige aquí tras iniciar sesión
 LOGOUT_REDIRECT_URL = "/login/"  # Redirige aquí tras cerrar sesión
+
+WKHTMLTOPDF_CMD = 'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+
+WKHTMLTOPDF_CMD_OPTIONS = {
+   'quiet':True,
+}
+
 
 AUTH_USER_MODEL = 'farmacias.Empleado'
 
