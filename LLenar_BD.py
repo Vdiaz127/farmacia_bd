@@ -1,15 +1,16 @@
 import os
 import django
 from datetime import date
+import random
+import string
 
 # Configuración del entorno de Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cadena_farmacias.settings')
 django.setup()
 
-from farmacias.models import Empleado, Sucursal, Laboratorio, Monodroga
+from farmacias.models import Empleado, Sucursal, Laboratorio, Monodroga, Medicamento, HistorialEmpleado, Medicamento_Sucursal, MedicamentoLaboratorio
 
 def create_sucursales():
-    # Lista de sucursales extraídas o deducidas del texto
     sucursales = [
         {"nombre": "Farmacia X", "ciudad": "Ciudad A", "direccion": "Av. Principal #123", "telefono": "0212-1234567"},
         {"nombre": "Farmacia Z", "ciudad": "Ciudad B", "direccion": "Calle Secundaria #456", "telefono": "0212-7654321"},
@@ -29,114 +30,36 @@ def create_sucursales():
         )
         if created:
             print(f"Sucursal '{obj.nombre}' registrada con éxito.")
+            create_empleados_for_sucursal(obj)
         else:
             print(f"Sucursal '{obj.nombre}' ya existe en la base de datos.")
 
-def create_test_users():
-    # Lista de usuarios de prueba
-    users = [
-        {
-            'email': 'admin@empresa.com',
-            'nombre': 'Admin',
-            'apellido': 'Admin',
-            'cedula': '1234567890',
-            'fecha_nacimiento': date(1990, 1, 1),
-            'telefono': '123456789',
-            'direccion': 'Calle Ficticia 123',
-            'password': '123456',
-            'fecha_ingreso': date(2020, 1, 1),
-            'cargo': 'admin',
-            'sucursal': 'Farmacia X'
-        },
-        {
-            'email': 'empleado1@empresa.com',
-            'nombre': 'Empleado',
-            'apellido': 'Uno',
-            'cedula': '1234567891',
-            'fecha_nacimiento': date(1985, 5, 15),
-            'telefono': '987654321',
-            'direccion': 'Avenida Ficticia 456',
-            'password': '123456',
-            'fecha_ingreso': date(2022, 6, 1),
-            'cargo': 'farmaceutico',
-            'sucursal': 'Farmacia Z'
-        },
-        {
-            'email': 'empleado2@empresa.com',
-            'nombre': 'Empleado',
-            'apellido': 'Dos',
-            'cedula': '1234567892',
-            'fecha_nacimiento': date(1988, 3, 22),
-            'telefono': '123123123',
-            'direccion': 'Calle Real 789',
-            'password': '123456',
-            'fecha_ingreso': date(2021, 7, 1),
-            'cargo': 'auxiliar',
-            'sucursal': 'Farmacia Central'
-        },
-        {
-            'email': 'empleado3@empresa.com',
-            'nombre': 'Empleado',
-            'apellido': 'Tres',
-            'cedula': '1234567893',
-            'fecha_nacimiento': date(1992, 8, 30),
-            'telefono': '321321321',
-            'direccion': 'Avenida Siempre Viva 123',
-            'password': '123456',
-            'fecha_ingreso': date(2019, 9, 1),
-            'cargo': 'pasante',
-            'sucursal': 'Farmacia Norte'
-        },
-        {
-            'email': 'farmaceutico1@empresaX.com',
-            'nombre': 'Empleado',
-            'apellido': 'Uno',
-            'cedula': '12345815',
-            'fecha_nacimiento': date(1985, 5, 15),
-            'telefono': '987654321',
-            'direccion': 'Avenida Ficticia 456',
-            'password': '123456',
-            'fecha_ingreso': date(2022, 6, 1),
-            'cargo': 'farmaceutico',
-            'sucursal': 'Farmacia X'
-        },
-    ]
-
-    for user_data in users:
-        # Verificar si el usuario ya existe por correo electrónico
-        if not Empleado.objects.filter(email=user_data['email']).exists():
-            user = Empleado.objects.create_user(
-                email=user_data['email'],
-                nombre=user_data['nombre'],
-                apellido=user_data['apellido'],
-                cedula=user_data['cedula'],
-                telefono=user_data['telefono'],
-                direccion=user_data['direccion'],
-                password=user_data['password'],
-                fecha_nacimiento=user_data['fecha_nacimiento'],
-                fecha_ingreso=user_data['fecha_ingreso'],
-                cargo=user_data['cargo']
-            )
-            # Asignar atributos adicionales
-            user.is_staff = user_data.get('is_staff', False)
-            user.is_active = user_data.get('is_active', True)
-            user.is_superuser = user_data.get('is_superuser', False)
-            
-            # Asociar la sucursal según el nombre
-            sucursal_nombre = user_data.get('sucursal')
-            if sucursal_nombre:
-                try:
-                    sucursal_obj = Sucursal.objects.get(nombre=sucursal_nombre)
-                    user.sucursal = sucursal_obj
-                except Sucursal.DoesNotExist:
-                    print(f"La sucursal '{sucursal_nombre}' no existe. No se pudo asociar al usuario {user.email}.")
-            user.save()
-            print(f"Usuario '{user.email}' creado exitosamente.")
-        else:
-            print(f"Usuario '{user_data['email']}' ya existe.")
+def create_empleados_for_sucursal(sucursal):
+    cargos = ['admin', 'farmaceutico', 'auxiliar', 'pasante']
+    for cargo in cargos:
+        email = f"{cargo}@{sucursal.nombre.replace(' ', '').lower()}.com"
+        empleado = Empleado.objects.create_user(
+            email=email,
+            nombre=cargo.capitalize(),
+            apellido=sucursal.nombre.replace(' ', ''),
+            cedula=str(random.randint(1000000000, 9999999999)),
+            fecha_nacimiento=date(random.randint(1970, 2000), random.randint(1, 12), random.randint(1, 28)),
+            telefono=str(random.randint(1000000000, 9999999999)),
+            direccion=f"Dirección {cargo} {sucursal.nombre}",
+            password='123456',
+            fecha_ingreso=date.today(),
+            cargo=cargo,
+            sucursal=sucursal
+        )
+        HistorialEmpleado.objects.create(
+            empleado=empleado,
+            sucursal=sucursal,
+            cargo=cargo,
+            fecha_inicio=date.today()
+        )
+        print(f"Empleado '{empleado.email}' creado y registrado en el historial.")
 
 def create_laboratorios():
-    # Lista de laboratorios de ejemplo
     laboratorios = [
         {"nombre": "Laboratorio A", "direccion": "Calle Lab A 123", "telefono": "0212-1112222", "email": "labA@example.com"},
         {"nombre": "Laboratorio B", "direccion": "Calle Lab B 456", "telefono": "0212-3334444", "email": "labB@example.com"},
@@ -149,6 +72,7 @@ def create_laboratorios():
                 "direccion": lab["direccion"],
                 "telefono": lab["telefono"],
                 "email": lab["email"],
+                "especialPassword": generar_contraseña_aleatoria()
             }
         )
         if created:
@@ -156,12 +80,22 @@ def create_laboratorios():
         else:
             print(f"Laboratorio '{obj.nombre}' ya existe en la base de datos.")
 
+def generar_contraseña_aleatoria(length=12):
+    caracteres = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(random.choice(caracteres) for i in range(length))
+
 def create_monodrogas():
-    # Lista de monodrogas de ejemplo
     monodrogas = [
         {"nombre": "Paracetamol"},
         {"nombre": "Ibuprofeno"},
         {"nombre": "Ambroxol"},
+        {"nombre": "Amoxicilina"},
+        {"nombre": "Clorfenamina"},
+        {"nombre": "Dexametasona"},
+        {"nombre": "Loratadina"},
+        {"nombre": "Ranitidina"},
+        {"nombre": "Omeprazol"},
+        {"nombre": "Metformina"},
     ]
     for mono in monodrogas:
         obj, created = Monodroga.objects.get_or_create(
@@ -172,8 +106,57 @@ def create_monodrogas():
         else:
             print(f"Monodroga '{obj.nombre}' ya existe en la base de datos.")
 
+def create_medicamentos():
+    monodrogas = list(Monodroga.objects.all())
+    laboratorios = list(Laboratorio.objects.all())
+    medicamentos = [
+        {"nombre": "Medicamento A", "presentacion": "Tabletas", "precio": 10.50, "accion_terapeutica": "Analgésico"},
+        {"nombre": "Medicamento B", "presentacion": "Jarabe", "precio": 15.75, "accion_terapeutica": "Antiinflamatorio"},
+        {"nombre": "Medicamento C", "presentacion": "Inyección", "precio": 25.00, "accion_terapeutica": "Antibiótico"},
+        {"nombre": "Medicamento D", "presentacion": "Cápsulas", "precio": 12.30, "accion_terapeutica": "Antihistamínico"},
+        {"nombre": "Medicamento E", "presentacion": "Suspensión", "precio": 8.90, "accion_terapeutica": "Antipirético"},
+    ]
+    for med in medicamentos:
+        medicamento, created = Medicamento.objects.get_or_create(
+            nombre=med["nombre"],
+            defaults={
+                "presentacion": med["presentacion"],
+                "precio": med["precio"],
+                "accion_terapeutica": med["accion_terapeutica"],
+            }
+        )
+        if created:
+            medicamento.monodrogas.set(random.sample(monodrogas, k=random.randint(1, 3)))
+            medicamento.save()
+            print(f"Medicamento '{medicamento.nombre}' registrado con éxito.")
+        else:
+            print(f"Medicamento '{medicamento.nombre}' ya existe en la base de datos.")
+        
+        # Asignar el medicamento a un laboratorio
+        laboratorio = random.choice(laboratorios)
+        MedicamentoLaboratorio.objects.create(
+            medicamento=medicamento,
+            laboratorio=laboratorio
+        )
+        print(f"Medicamento '{medicamento.nombre}' asignado al laboratorio '{laboratorio.nombre}'.")
+
+        assign_medicamento_to_sucursales(medicamento, laboratorios)
+
+def assign_medicamento_to_sucursales(medicamento, laboratorios):
+    sucursales = list(Sucursal.objects.all())
+    for sucursal in random.sample(sucursales, k=random.randint(1, len(sucursales))):
+        laboratorio = random.choice(laboratorios)
+        cantidad = random.randint(1, 100)
+        Medicamento_Sucursal.objects.create(
+            medicamento=medicamento,
+            sucursal=sucursal,
+            laboratorio=laboratorio,
+            cantidad=cantidad
+        )
+        print(f"Medicamento '{medicamento.nombre}' asignado a la sucursal '{sucursal.nombre}' con cantidad {cantidad}.")
+
 if __name__ == '__main__':
     create_sucursales()
-    create_test_users()
     create_laboratorios()
     create_monodrogas()
+    create_medicamentos()

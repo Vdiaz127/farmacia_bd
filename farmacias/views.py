@@ -41,3 +41,9 @@ def perfil_sucursal(request, pk):
         'medicamentos': medicamentos,
     }
     return render(request, 'publico/PerfilSucursal.html', context)
+
+def inicio_auxiliar(request):
+    return render(request, 'auxiliar/inicio.html', {'auxiliar': request.user})
+
+def inicio_pasante(request):
+    return render(request, 'pasante/inicio.html', {'pasante': request.user})

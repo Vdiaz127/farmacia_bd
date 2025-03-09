@@ -45,6 +45,13 @@ urlpatterns = [
     path('admin/',inicio_admin, name='inicio_admin'),
     path('farmaceutico/',inicio_farmaceutico, name='inicio_farmaceutico'),
 
+    #PASANTE
+    path('pasante/',inicio_pasante, name='inicio_pasante'),
+
+    #AUXILIAR
+    path('auxiliar/',inicio_auxiliar, name='inicio_auxiliar'),
+
+
     #LABORATORIOS
     path('gestion_laboratorios/', gestion_laboratorios , name='gestion_laboratorios'),
     path('gestion_laboratorios/pdf', gestion_laboratorios_pdf , name='gestion_laboratorios_pdf'),
