@@ -51,7 +51,6 @@ class Empleado(AbstractBaseUser):
     fecha_nacimiento = models.DateField()
     telefono = models.CharField(max_length=15)
     direccion = models.TextField(blank=True, null=True)
-    fecha_ingreso = models.DateField()
     sucursal = models.ForeignKey(Sucursal, on_delete=models.SET_NULL, null=True, blank=True, related_name='empleados')
     cargo = models.CharField(max_length=20, choices=CARGOS, default='auxiliar')
 

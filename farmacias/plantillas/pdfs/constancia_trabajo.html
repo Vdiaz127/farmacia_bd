@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Constancia de Trabajo</title>
+    <style>
+        /* Configuración de la página: A4 con márgenes de 20mm */
+        @page {
+            size: A4;
+            margin: 20mm;
+        }
+        /* Estilos globales */
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #f8f8f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        /* Contenedor principal, se ajusta al área definida en @page */
+        .container {
+            width: 100%;
+            box-sizing: border-box;
+            background: #fff;
+            padding: 0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 15mm;
+            padding: 0 10mm;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            color: #2c3e50;
+        }
+        .header p {
+            font-size: 1em;
+            margin: 5px 0;
+        }
+        .section-title {
+            font-size: 1.2em;
+            color: #2c3e50;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 5px;
+            margin-bottom: 5mm;
+        }
+        .section {
+            margin-bottom: 10mm;
+            padding: 0 10mm;
+        }
+        .section p {
+            margin: 5px 0;
+            line-height: 1.6;
+        }
+        .section p strong {
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.9em;
+            color: #555;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 5mm;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Encabezado de la constancia -->
+        <header class="header">
+            <h1>Constancia de Trabajo</h1>
+            <p><strong>Fecha:</strong> {{ fecha_actual }}</p>
+        </header>
+        
+        <!-- Datos del empleado -->
+        <section class="section">
+            <div class="section-title">Datos del Empleado</div>
+            <p><strong>Nombre:</strong> {{ empleado.nombre }} {{ empleado.apellido }}</p>
+            <p><strong>Cédula:</strong> {{ empleado.cedula }}</p>
+            <p><strong>Cargo:</strong> {{ empleado.cargo }}</p>
+            <p><strong>Sucursal:</strong> {{ empleado.sucursal.nombre }}</p>
+        </section>
+        
+        <!-- Contenido de la constancia -->
+        <section class="section">
+            <div class="section-title">Contenido</div>
+            <p>Por medio de la presente, se hace constar que el Sr./Sra. <strong>{{ empleado.nombre }} {{ empleado.apellido }}</strong>, 
+            identificado/a con cédula de identidad <strong>{{ empleado.cedula }}</strong>, ha trabajado en nuestra empresa 
+            desempeñando el cargo de <strong>{{ empleado.cargo }}</strong> en la sucursal <strong>{{ empleado.sucursal.nombre }}</strong>.</p>
+            <p>Esta constancia se expide a solicitud del interesado/a para los fines que estime conveniente.</p>
+        </section>
+        
+        <!-- Pie de página -->
+        <footer>
+            <p>Atentamente,</p>
+            <p><strong>FARMACIAS UNEG</strong></p>
+        </footer>
+    </div>
+</body>
+</html>

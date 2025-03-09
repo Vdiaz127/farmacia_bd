@@ -28,10 +28,17 @@
                             {% if pasante.sucursal %}{{ pasante.sucursal.nombre }}{% else %}No asignada{% endif %}
                         </li>
                     </ul>
+                    <div class="mt-4">
+                        <a href="{% url 'constancia_trabajo_pdf' pasante.cedula %}" class="btn btn-success me-2">
+                            <i class="bi bi-file-earmark-pdf me-1"></i> Descargar Constancia de Trabajo
+                        </a>
+                        <a href="{% url 'historial_trabajo_pdf' pasante.cedula %}" class="btn btn-info">
+                            <i class="bi bi-file-earmark-pdf me-1"></i> Descargar Rotación de Personal
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
+</div>
 {% endblock %}

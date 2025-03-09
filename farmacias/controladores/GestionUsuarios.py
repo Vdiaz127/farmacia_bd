@@ -85,7 +85,6 @@ def registrar_empleado(request):
                 fecha_nacimiento=fecha_nacimiento,
                 telefono=telefono,
                 direccion=direccion,
-                fecha_ingreso=fecha_ingreso,
                 sucursal=sucursal,
                 cargo=cargo,
             )

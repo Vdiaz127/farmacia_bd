@@ -89,8 +89,7 @@ urlpatterns = [
     path("historial/", get_historial, name="get_historial"),
     path("historial/<int:sucursal>", get_historial, name="get_historial"),
     path("agregar_historial_empleado/", agregar_historial_empleado, name="agregar_historial_empleado"),
-    path("historial/pdf/", get_historial_pdf, name="get_historial_pdf"),
-    path("historial/pdf/<int:sucursal>", get_historial_pdf, name="get_historial_pdf"),
+ 
 
     #USUARIO: FARMAUCETICO
     path('farmaceutico/', inicio_farmaceutico, name='inicio_farmaceutico'),
@@ -105,4 +104,7 @@ urlpatterns = [
     #pdfs / facturas
     path('factura/compra/<int:compra_id>', factura_compra_pdf , name='factura_compra_pdf'),
     path('factura/pedido/<int:pedido_id>', factura_pedido_pdf , name='factura_pedido_pdf'),
+    path('constancia_trabajo/<str:empleado_id>', constancia_trabajo_pdf , name='constancia_trabajo_pdf'),
+    path('historial_trabajo/<str:empleado_id>', historial_trabajo_pdf , name='historial_trabajo_pdf'),
+    path('rotacion_personal/<int:sucursal_id>', rotacion_personal_pdf , name='rotacion_personal_pdf'),
 ]

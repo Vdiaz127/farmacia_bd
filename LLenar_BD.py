@@ -47,7 +47,6 @@ def create_empleados_for_sucursal(sucursal):
             telefono=str(random.randint(1000000000, 9999999999)),
             direccion=f"Dirección {cargo} {sucursal.nombre}",
             password='123456',
-            fecha_ingreso=date.today(),
             cargo=cargo,
             sucursal=sucursal
         )

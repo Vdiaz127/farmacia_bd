@@ -30,6 +30,7 @@ def get_historial(request, sucursal=None):
     ctx = {
         'historiales': historiales,
         'sucursal_name': sucursal_name,
+        'sucursal': sucursal,
         'sucursales': sucursales,
         'cargos': Empleado.CARGOS,
     }
@@ -82,23 +83,23 @@ def agregar_historial_empleado(request):
             return redirect('get_historial')
     return redirect('get_historial')
 
-@login_required
-@role_required(['admin'])
-def get_historial_pdf(request, sucursal=None):
-    # Filtrar historiales según la sucursal si se indicó
-    historiales = HistorialEmpleado.objects.all()
-    if sucursal:
-        historiales = historiales.filter(sucursal=sucursal)
+# @login_required
+# @role_required(['admin'])
+# def get_historial_pdf(request, sucursal=None):
+#     # Filtrar historiales según la sucursal si se indicó
+#     historiales = HistorialEmpleado.objects.all()
+#     if sucursal:
+#         historiales = historiales.filter(sucursal=sucursal)
     
-    # Contexto para la plantilla
-    context = {'historiales': historiales}
-    # Renderiza la plantilla a una cadena HTML
-    html_string = render_to_string('admin/GestionHistorialEmpleado.html', context)
-    # Usar WeasyPrint para generar el PDF; base_url es importante para resolver rutas relativas a archivos estáticos
-    html = HTML(string=html_string, base_url=request.build_absolute_uri())
-    pdf = html.write_pdf()
+#     # Contexto para la plantilla
+#     context = {'historiales': historiales}
+#     # Renderiza la plantilla a una cadena HTML
+#     html_string = render_to_string('admin/GestionHistorialEmpleado.html', context)
+#     # Usar WeasyPrint para generar el PDF; base_url es importante para resolver rutas relativas a archivos estáticos
+#     html = HTML(string=html_string, base_url=request.build_absolute_uri())
+#     pdf = html.write_pdf()
     
-    # Crear la respuesta HTTP con el contenido PDF
-    response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="HistorialEmpleado.pdf"'
-    return response
+#     # Crear la respuesta HTTP con el contenido PDF
+#     response = HttpResponse(pdf, content_type='application/pdf')
+#     response['Content-Disposition'] = 'inline; filename="HistorialEmpleado.pdf"'
+#     return response

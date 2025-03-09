@@ -9,9 +9,20 @@
             <i class="bi bi-person-lines-fill me-2"></i>Gestión de Empleados 
             {% if sucursal_name %}
                 - {{ sucursal_name }}
+            {% else %}
+                - Todas las Sucursales
             {% endif %}
         </h1>
     </div>
+
+    <!-- Botón para descargar PDF de rotación de personal -->
+    {% if sucursal %}
+        <div class="text-end mb-4">
+            <a href="{% url 'rotacion_personal_pdf' sucursal %}" class="btn btn-danger">
+                <i class="bi bi-file-earmark-pdf"></i> Descargar PDF de Rotación de Personal
+            </a>
+        </div>
+    {% endif %}
 
     <!-- Modal de creación -->
     {% if historiales %}

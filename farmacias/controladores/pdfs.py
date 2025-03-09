@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from weasyprint import HTML
-from farmacias.models import Compra, Pedido, CompraItem, PedidoItem
+from farmacias.models import Compra, Pedido, Empleado, HistorialEmpleado, Sucursal
 
 def factura_compra_pdf(request, compra_id):
     """
@@ -88,4 +88,74 @@ def factura_pedido_pdf(request, pedido_id):
     # Preparamos la respuesta HTTP para forzar la descarga del PDF
     response = HttpResponse(pdf_file, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="FacturaPedido_{pedido_id}.pdf"'
+    return response
+
+def constancia_trabajo_pdf(request, empleado_id):
+    """
+    Genera una constancia de trabajo en PDF para un empleado pasante o auxiliar.
+    
+    La plantilla 'constancia_trabajo.html' debe estar creada y ubicada en tu directorio de plantillas.
+    """
+    empleado = get_object_or_404(Empleado, cedula=empleado_id)
+    
+    if empleado.cargo not in ['auxiliar', 'pasante']:
+        return HttpResponse("Solo se pueden generar constancias para auxiliares o pasantes.", status=400)
+    
+    context = {
+        'empleado': empleado,
+        'fecha_actual': datetime.date.today(),
+    }
+    
+    html_string = render_to_string('pdfs/constancia_trabajo.html', context, request=request)
+    html = HTML(string=html_string, base_url=request.build_absolute_uri())
+    pdf_file = html.write_pdf()
+    
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="ConstanciaTrabajo_{empleado_id}.pdf"'
+    return response
+
+def historial_trabajo_pdf(request, empleado_id):
+    """
+    Genera el historial de trabajo en PDF de un empleado.
+    
+    La plantilla 'historial_trabajo.html' debe estar creada y ubicada en tu directorio de plantillas.
+    """
+    empleado = get_object_or_404(Empleado, cedula=empleado_id)
+    historial = HistorialEmpleado.objects.filter(empleado=empleado).order_by('fecha_inicio')
+    
+    context = {
+        'empleado': empleado,
+        'historial': historial,
+        'fecha_actual': datetime.date.today(),
+    }
+    
+    html_string = render_to_string('pdfs/historial_trabajo.html', context, request=request)
+    html = HTML(string=html_string, base_url=request.build_absolute_uri())
+    pdf_file = html.write_pdf()
+    
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="HistorialTrabajo_{empleado_id}.pdf"'
+    return response
+
+def rotacion_personal_pdf(request, sucursal_id):
+    """
+    Genera un reporte en PDF de la rotación de personal de una sucursal específica.
+    
+    La plantilla 'rotacion_personal.html' debe estar creada y ubicada en tu directorio de plantillas.
+    """
+    sucursal = get_object_or_404(Sucursal, id=sucursal_id)
+    rotacion = HistorialEmpleado.objects.filter(sucursal=sucursal).order_by('fecha_inicio')
+    
+    context = {
+        'sucursal': sucursal,
+        'rotacion': rotacion,
+        'fecha_actual': datetime.date.today(),
+    }
+    
+    html_string = render_to_string('pdfs/rotacion_personal.html', context, request=request)
+    html = HTML(string=html_string, base_url=request.build_absolute_uri())
+    pdf_file = html.write_pdf()
+    
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="RotacionPersonal_{sucursal_id}.pdf"'
     return response
